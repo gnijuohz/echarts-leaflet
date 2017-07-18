@@ -1,0 +1,13 @@
+{
+  "name": "echarts-leaflet",
+  "version": "1.0.0",
+  "description": "leaflet extension for echarts",
+  "main": "index.js",
+  "repository": "git@github.com:gnijuohz/echarts-leaflet.git",
+  "author": "gnijuohz <gnijuohz@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "echarts": "^3.6.2",
+    "leaflet": "^1.1.0"
+  }
+}
