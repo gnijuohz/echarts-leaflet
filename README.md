@@ -16,11 +16,16 @@
 The configuration is just like `geo`,
 
 ```javascript
-option = { 
+option = {
   leaflet: {
       center: [120.13066322374, 30.240018034923],
       zoom: 3,
-      roam: true
+      roam: true,
+      // the default is http://{s}.tile.osm.org/{z}/{x}/{y}.png
+      tile: {
+        url: 'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, Tiles courtesy of <a href="http://hot.openstreetmap.org/" target="_blank">Humanitarian OpenStreetMap Team</a>'
+      }
   },
   series: [{
     coordinateSystem: 'leaflet',
@@ -32,3 +37,6 @@ option = {
 
 - [全国空气质量(Air quality in China)](http://gnijuohz.github.io/echarts-leaflet/example/leaflet.html)
 
+## Build
+
+`rollup --config`

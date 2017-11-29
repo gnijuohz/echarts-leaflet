@@ -1,28 +1,26 @@
 /**
  * Leftlet component extension
  */
-define(function (require) {
 
-    require('echarts').registerCoordinateSystem(
-        'leaflet', require('./LeafletCoordSys')
-    );
-    require('./LeafletModel');
-    require('./LeafletView');
+import * as echarts from 'echarts';
+import LeafletCoordSys from './LeafletCoordSys';
 
-    // Action
-    require('echarts').registerAction({
-        type: 'leafletRoam',
-        event: 'leafletRoam',
-        update: 'updateLayout'
-    }, function (payload, ecModel) {
-        ecModel.eachComponent('leaflet', function (leafletModel) {
-            var leaflet = leafletModel.getLeaflet();
-            var center = leaflet.getCenter();
-            leafletModel.setCenterAndZoom([center.lng, center.lat], leaflet.getZoom());
-        });
+import './LeafletModel';
+import './LeafletView';
+
+echarts.registerCoordinateSystem('leaflet', LeafletCoordSys);
+
+
+echarts.registerAction({
+    type: 'leafletRoam',
+    event: 'leafletRoam',
+    update: 'updateLayout'
+}, function (payload, ecModel) {
+    ecModel.eachComponent('leaflet', function (leafletModel) {
+        var leaflet = leafletModel.getLeaflet();
+        var center = leaflet.getCenter();
+        leafletModel.setCenterAndZoom([center.lng, center.lat], leaflet.getZoom());
     });
-
-    return {
-        version: '1.0.0'
-    };
 });
+
+export var version='1.0.0';
