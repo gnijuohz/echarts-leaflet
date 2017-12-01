@@ -31,6 +31,24 @@ option = {
     coordinateSystem: 'leaflet',
   }]
 }
+
+option = {
+  leaflet: {
+      ...
+      tile: {
+        // url: 'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
+        // url: { 
+          // "天地图": L.tileLayer('http://t2.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}').addTo(map), (地图瓦片) 
+          // "天地图": L.tileLayer('http://t3.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}').addTo(map) (地区文字标识) 
+        //},
+        // url: [
+          // ['天地图','高德地图'], (key 名字)
+          // ['http://t2.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}', 'http://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}']
+        // ]
+      }
+  }
+  ...
+}
 ```
 
 ## Demo
