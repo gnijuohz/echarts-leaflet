@@ -164,12 +164,21 @@ LeafletCoordSys.create = function (ecModel, api) {
 			        position: "topleft"
 			    }).addTo(map);
             } else if(tile.url instanceof Array){
-                for(var i = 0; i < tile.url.length; i++) {
-                    baseLayers[i] = L.tileLayer(tile.url[i], { attribution: tile.attribution }).addTo(map);
-                    L.control.layers(baseLayers,{}, {
-                        position: "topleft"
-                    }).addTo(map);
-                }
+                if(tile.url.length >= 2){
+                    for(var i = 0; i < tile.url[0].length; i++) {
+                        baseLayers[tile.url[0][i]] = L.tileLayer(tile.url[1][i], { attribution: tile.attribution }).addTo(map);
+                        L.control.layers(baseLayers,{}, {
+                            position: "topleft"
+                        }).addTo(map);
+                    }
+                } else {
+                    for(var i = 0; i < tile.url.length; i++) {
+                        baseLayers[i] = L.tileLayer(tile.url[i], { attribution: tile.attribution }).addTo(map);
+                        L.control.layers(baseLayers,{}, {
+                            position: "topleft"
+                        }).addTo(map);
+                    }
+                }            
             } else {
                 L.tileLayer(tile.url, {
                     attribution: tile.attribution
