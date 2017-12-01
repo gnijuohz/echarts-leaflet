@@ -203,122 +203,132 @@ LeafletCoordSys.create = function (ecModel, api) {
     });
 };
 
+/**
+ * compare if two arrays of length 2 are equal
+ * @param {Array} a array of length 2
+ * @param {Array} b array of length 2
+ * @return {Boolean}
+ */
 function v2Equal(a, b) {
-    return a && b && a[0] === b[0] && a[1] === b[1];
+  return a && b && a[0] === b[0] && a[1] === b[1];
 }
 
 echarts.extendComponentModel({
-    type: 'leaflet',
+  type: 'leaflet',
 
-    getLeaflet: function () {
-        // __map is injected when creating BMapCoordSys
-        return this.__map;
+  getLeaflet: function() {
+    // __map is injected when creating BMapCoordSys
+    return this.__map;
+  },
+
+  setCenterAndZoom: function(center, zoom) {
+    this.option.center = center;
+    this.option.zoom = zoom;
+  },
+
+  centerOrZoomChanged: function(center, zoom) {
+    let option = this.option;
+    return !(v2Equal(center, option.center) && zoom === option.zoom);
+  },
+
+  defaultOption: {
+    center: [104.114129, 37.550339],
+    zoom: 2,
+    mapStyle: {},
+    roam: false,
+    tile: {
+      url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
+      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
     },
-
-    setCenterAndZoom: function (center, zoom) {
-        this.option.center = center;
-        this.option.zoom = zoom;
-    },
-
-    centerOrZoomChanged: function (center, zoom) {
-        var option = this.option;
-        return !(v2Equal(center, option.center) && zoom === option.zoom);
-    },
-
-    defaultOption: {
-        center: [104.114129, 37.550339],
-        zoom: 2,
-        mapStyle: {},
-        roam: false,
-        tile: {
-            url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
-            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        }
-    }
+  },
 });
 
 echarts.extendComponentView({
-    type: 'leaflet',
+  type: 'leaflet',
 
-    render: function (leafletModel, ecModel, api) {
-        var rendering = true;
+  render: function(leafletModel, ecModel, api) {
+    let rendering = true;
 
-        var leaflet = leafletModel.getLeaflet();
-        var viewportRoot = api.getZr().painter.getViewportRoot();
-        var coordSys = leafletModel.coordinateSystem;
-        var moveHandler = function (type, target) {
-            if (rendering) {
-                return;
-            }
-            var offsetEl = viewportRoot.parentNode.parentNode;
-            // calculate new mapOffset
-            var transformStyle = offsetEl.style.transform;
-            var dx = 0;
-            var dy = 0;
-            if (transformStyle) {
-                transformStyle = transformStyle.replace('translate3d(', '');
-                var parts = transformStyle.split(',');
-                dx = -parseInt(parts[0], 10);
-                dy = -parseInt(parts[1], 10);
-            } else { // browsers that don't support transform: matrix
-                dx = -parseInt(offsetEl.style.left, 10);
-                dy = -parseInt(offsetEl.style.top, 10);
-            }
-            var mapOffset = [dx, dy];
-            viewportRoot.style.left = mapOffset[0] + 'px';
-            viewportRoot.style.top = mapOffset[1] + 'px';
+    let leaflet = leafletModel.getLeaflet();
+    let viewportRoot = api.getZr().painter.getViewportRoot();
+    let coordSys = leafletModel.coordinateSystem;
+    let moveHandler = function(type, target) {
+      if (rendering) {
+        return;
+      }
+      let offsetEl = viewportRoot.parentNode.parentNode;
+      // calculate new mapOffset
+      let transformStyle = offsetEl.style.transform;
+      let dx = 0;
+      let dy = 0;
+      if (transformStyle) {
+        transformStyle = transformStyle.replace('translate3d(', '');
+        let parts = transformStyle.split(',');
+        dx = -parseInt(parts[0], 10);
+        dy = -parseInt(parts[1], 10);
+      } else { // browsers that don't support transform: matrix
+        dx = -parseInt(offsetEl.style.left, 10);
+        dy = -parseInt(offsetEl.style.top, 10);
+      }
+      let mapOffset = [dx, dy];
+      viewportRoot.style.left = mapOffset[0] + 'px';
+      viewportRoot.style.top = mapOffset[1] + 'px';
 
-            coordSys.setMapOffset(mapOffset);
-            leafletModel.__mapOffset = mapOffset;
+      coordSys.setMapOffset(mapOffset);
+      leafletModel.__mapOffset = mapOffset;
 
-            api.dispatchAction({
-                type: 'leafletRoam'
-            });
-        };
+      api.dispatchAction({
+        type: 'leafletRoam',
+      });
+    };
 
-        function zoomEndHandler() {
-            if (rendering) {
-                return;
-            }
-            api.dispatchAction({
-                type: 'leafletRoam'
-            });
-        }
-
-        function zoomHandler() {
-            moveHandler();
-        }
-
-        leaflet.off('move', this._oldMoveHandler);
-        leaflet.off('zoom', this._oldZoomHandler);
-        leaflet.off('zoomend', this._oldZoomEndHandler);
-
-        leaflet.on('move', moveHandler);
-        leaflet.on('zoom', zoomHandler);
-        leaflet.on('zoomend', zoomEndHandler);
-
-        this._oldMoveHandler = moveHandler;
-        this._oldZoomEndHandler = zoomHandler;
-        this._oldZoomEndHandler = zoomEndHandler;
-
-        var roam = leafletModel.get('roam');
-        if (roam && roam !== 'scale') {
-            leaflet.dragging.enable();
-        } else {
-            leaflet.dragging.disable();
-        }
-        if (roam && roam !== 'move') {
-            leaflet.scrollWheelZoom.enable();
-            leaflet.doubleClickZoom.enable();
-            leaflet.touchZoom.enable();
-        } else {
-            leaflet.scrollWheelZoom.disable();
-            leaflet.doubleClickZoom.disable();
-            leaflet.touchZoom.disable();
-        }
-
-        rendering = false;
+    /**
+     * handler for map zoomEnd event
+     */
+    function zoomEndHandler() {
+      if (rendering) return;
+      api.dispatchAction({
+        type: 'leafletRoam',
+      });
     }
+
+    /**
+     * handler for map zoom event
+     */
+    function zoomHandler() {
+      moveHandler();
+    }
+
+    leaflet.off('move', this._oldMoveHandler);
+    leaflet.off('zoom', this._oldZoomHandler);
+    leaflet.off('zoomend', this._oldZoomEndHandler);
+
+    leaflet.on('move', moveHandler);
+    leaflet.on('zoom', zoomHandler);
+    leaflet.on('zoomend', zoomEndHandler);
+
+    this._oldMoveHandler = moveHandler;
+    this._oldZoomEndHandler = zoomHandler;
+    this._oldZoomEndHandler = zoomEndHandler;
+
+    let roam = leafletModel.get('roam');
+    if (roam && roam !== 'scale') {
+      leaflet.dragging.enable();
+    } else {
+      leaflet.dragging.disable();
+    }
+    if (roam && roam !== 'move') {
+      leaflet.scrollWheelZoom.enable();
+      leaflet.doubleClickZoom.enable();
+      leaflet.touchZoom.enable();
+    } else {
+      leaflet.scrollWheelZoom.disable();
+      leaflet.doubleClickZoom.disable();
+      leaflet.touchZoom.disable();
+    }
+
+    rendering = false;
+  },
 });
 
 /**
@@ -329,18 +339,18 @@ echarts.registerCoordinateSystem('leaflet', LeafletCoordSys);
 
 
 echarts.registerAction({
-    type: 'leafletRoam',
-    event: 'leafletRoam',
-    update: 'updateLayout'
-}, function (payload, ecModel) {
-    ecModel.eachComponent('leaflet', function (leafletModel) {
-        var leaflet = leafletModel.getLeaflet();
-        var center = leaflet.getCenter();
-        leafletModel.setCenterAndZoom([center.lng, center.lat], leaflet.getZoom());
-    });
+  type: 'leafletRoam',
+  event: 'leafletRoam',
+  update: 'updateLayout',
+}, function(payload, ecModel) {
+  ecModel.eachComponent('leaflet', function(leafletModel) {
+    const leaflet = leafletModel.getLeaflet();
+    const center = leaflet.getCenter();
+    leafletModel.setCenterAndZoom([center.lng, center.lat], leaflet.getZoom());
+  });
 });
 
-var version='1.0.0';
+const version='1.0.0';
 
 exports.version = version;
 
