@@ -38,7 +38,7 @@ LeafletCoordSys.prototype.setMapOffset = function(mapOffset) {
 };
 
 LeafletCoordSys.prototype.getLeaflet = function() {
-  return this.map;
+  return this._map;
 };
 
 LeafletCoordSys.prototype.dataToPoint = function(data) {
