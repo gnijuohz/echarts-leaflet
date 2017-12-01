@@ -11,9 +11,13 @@
 <script type="text/javascript" src="../dist/echarts-leaflet.js"></script>
 ```
 
-### ECharts Option
+## ECharts Option
 
-The configuration is just like `geo`,
+You can use one or more tile layers via the `tiles` option. It's an array of
+layers. You can specify the options of layer control when you have more than 1
+layer.
+
+The default tile layer is `http://{s}.tile.osm.org/{z}/{x}/{y}.png`
 
 ```javascript
 option = {
@@ -21,33 +25,39 @@ option = {
       center: [120.13066322374, 30.240018034923],
       zoom: 3,
       roam: true,
-      // the default is http://{s}.tile.osm.org/{z}/{x}/{y}.png
-      tile: {
+      tiles: [{
+        text: 'OpenStreetMap',
         url: 'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, Tiles courtesy of <a href="http://hot.openstreetmap.org/" target="_blank">Humanitarian OpenStreetMap Team</a>'
-      }
+      }]
   },
   series: [{
     coordinateSystem: 'leaflet',
   }]
 }
+```
 
+Specify multiple layers:
+```javascript
 options = {
 	leaflet: {
-		...
-		tile: [
-	        ['天地图','地图'],
-	        ['http://t2.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}', 'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png']
-        ],
-//      url: [
-//	        ['天地图','天地图'],
-//	        ['http://t2.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}', 'http://t3.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}']
-//      ],
-        ...
+    ...
+		layerControl: {
+      position: 'topleft'
+    },
+    tiles: [{
+      text: '天地图',
+      url: 'http://t2.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}',
+      attribution: 'tianditu.com'
+    }, {
+      text: 'Open Street Map',
+      url: 'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, Tiles courtesy of <a href="http://hot.openstreetmap.org/" target="_blank">Humanitarian OpenStreetMap Team</a>'
+    }]
+    ...
 	},
 	...
 }
-
 ```
 
 ## Demo

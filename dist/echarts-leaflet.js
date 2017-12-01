@@ -4,23 +4,13 @@
 	(factory((global.leaflet = {}),global.echarts));
 }(this, (function (exports,echarts) { 'use strict';
 
-/**
- * constructor for Leaflet CoordSys
- * @param {L.map} map
- * @param {Object} api
- */
 function LeafletCoordSys(map, api) {
   this._map = map;
   this.dimensions = ['lng', 'lat'];
   this._mapOffset = [0, 0];
-
   this._api = api;
-
   this._projection = L.Projection.Mercator;
 }
-
-LeafletCoordSys.prototype.dimensions = ['lng', 'lat'];
-
 
 LeafletCoordSys.prototype.dimensions = ['lng', 'lat'];
 
@@ -75,7 +65,6 @@ L.CustomOverlay = L.Layer.extend({
 
   onAdd: function(map) {
     let pane = map.getPane(this.options.pane);
-
     pane.appendChild(this._container);
 
     // Calculate initial position of container with
@@ -132,33 +121,26 @@ LeafletCoordSys.create = function(ecModel, api) {
       mapRoot.classList.add('ec-extension-leaflet');
       root.appendChild(mapRoot);
       let map = leafletModel.__map = L.map(mapRoot);
-      let tile = leafletModel.get('tile');
-      var baseLayers = {};
-	    if(tile.url instanceof Array){
-	        if(tile.url.length >= 2 &&  (tile.url[0] instanceof Array && tile.url[1] instanceof Array) ){
-	            for(var i = 0; i < tile.url[0].length; i++) {
-	                baseLayers[tile.url[0][i]] = L.tileLayer(tile.url[1][i], { attribution: tile.attribution }).addTo(map);
-	            }
-	        } else {
-	            for(var i = 0; i < tile.url.length; i++) {
-	                baseLayers[i] = L.tileLayer(tile.url[i], { attribution: tile.attribution }).addTo(map);
-	            }
-	        }
-	        L.control.layers(baseLayers,{}, { position: "topleft" }).addTo(map);
-	    } else {
-	        L.tileLayer(tile.url, {
-	            attribution: tile.attribution
-	        }).addTo(map);
-	    }
-
+      const tiles = leafletModel.get('tiles');
+      let baseLayers = {};
+      for (let tile of tiles) {
+        baseLayers[tile.text] = L.tileLayer(tile.url, {
+          attribution: tile.attribution,
+        }).addTo(map);
+      }
+      // add layer control when there are more than two layers
+      if (tiles.length > 1) {
+        const layerControlOpts = leafletModel.get('layerControl');
+        L.control.layers(baseLayers, {}, layerControlOpts).addTo(map);
+      }
       new L.CustomOverlay(viewportRoot).addTo(map);
     }
     let map = leafletModel.__map;
 
     // Set leaflet options
     // centerAndZoom before layout and render
-    let center = leafletModel.get('center');
-    let zoom = leafletModel.get('zoom');
+    const center = leafletModel.get('center');
+    const zoom = leafletModel.get('zoom');
     if (center && zoom) {
       map.setView([center[1], center[0]], zoom);
     }
@@ -192,7 +174,7 @@ echarts.extendComponentModel({
   type: 'leaflet',
 
   getLeaflet: function() {
-    // __map is injected when creating BMapCoordSys
+    // __map is injected when creating LeafletCoordSys
     return this.__map;
   },
 
@@ -211,10 +193,11 @@ echarts.extendComponentModel({
     zoom: 2,
     mapStyle: {},
     roam: false,
-    tile: {
+    layerControl: {},
+    tiles: [{
       url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-    },
+    }],
   },
 });
 
@@ -311,7 +294,6 @@ echarts.extendComponentView({
  */
 
 echarts.registerCoordinateSystem('leaflet', LeafletCoordSys);
-
 
 echarts.registerAction({
   type: 'leafletRoam',

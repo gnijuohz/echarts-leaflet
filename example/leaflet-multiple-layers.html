@@ -1010,18 +1010,18 @@
 					center: [104.114129, 37.550339],
 					zoom: 4,
 					roam: true,
-					tile: {
-//						url: [
-//					        ['天地图','天地图'],
-//					        ['http://t2.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}', 'http://t3.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}']
-//				        ],
-						url: [
-					        ['天地图','地图'],
-					        ['http://t2.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}', 'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png']
-				        ],
-//						url: ['http://t2.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}', 'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png'],
+					layerControl: {
+						position: 'topleft'
+					},
+					tiles: [{
+						text: '天地图',
+						url: 'http://t2.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}',
+						attribution: 'tianditu.com'
+					}, {
+						text: 'Open Street Map',
+						url: 'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
 						attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, Tiles courtesy of <a href="http://hot.openstreetmap.org/" target="_blank">Humanitarian OpenStreetMap Team</a>'
-					}
+					}]
 				},
 				series: [{
 						name: 'pm2.5',
