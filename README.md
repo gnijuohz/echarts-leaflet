@@ -62,7 +62,7 @@ options = {
 
 ## Demo
 
-- [全国空气质量(Air quality in China)](http://gnijuohz.github.io/echarts-leaflet/example/leaflet.html)
+- [全国空气质量(Air quality in China)](http://gnijuohz.github.io/echarts-leaflet/example/leaflet-multiple-layers.html)
 
 ## Build
 
