@@ -134,14 +134,14 @@ LeafletCoordSys.create = function(ecModel, api) {
       root.appendChild(mapRoot);
       let map = leafletModel.__map = L.map(mapRoot);
       let tile = leafletModel.get('tile');
-      var baseLayers = {};
+      let baseLayers = {};
 	    if(tile.url instanceof Array){
 	        if(tile.url.length >= 2 &&  (tile.url[0] instanceof Array && tile.url[1] instanceof Array) ){
-	            for(var i = 0; i < tile.url[0].length; i++) {
+	            for(let i = 0; i < tile.url[0].length; i++) {
 	                baseLayers[tile.url[0][i]] = L.tileLayer(tile.url[1][i], { attribution: tile.attribution }).addTo(map);
 	            }
 	        } else {
-	            for(var i = 0; i < tile.url.length; i++) {
+	            for(let i = 0; i < tile.url.length; i++) {
 	                baseLayers[i] = L.tileLayer(tile.url[i], { attribution: tile.attribution }).addTo(map);
 	            }
 	        }
