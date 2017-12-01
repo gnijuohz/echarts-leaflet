@@ -3,11 +3,18 @@
   "version": "1.0.0",
   "description": "leaflet extension for echarts",
   "main": "index.js",
+  "scripts": {
+    "lint": "./node_modules/.bin/eslint src/*.js"
+  },
   "repository": "git@github.com:gnijuohz/echarts-leaflet.git",
-  "author": "gnijuohz <gnijuohz@gmail.com>",
-  "license": "ISC",
+  "author": "Jing Zhou <gnijuohz@gmail.com>",
+  "license": "MIT",
   "dependencies": {
     "echarts": "^3.6.2",
     "leaflet": "^1.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.12.1",
+    "eslint-config-google": "^0.9.1"
   }
 }
