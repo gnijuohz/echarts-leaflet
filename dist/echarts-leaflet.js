@@ -37,7 +37,7 @@ LeafletCoordSys.prototype.setMapOffset = function(mapOffset) {
 };
 
 LeafletCoordSys.prototype.getLeaflet = function() {
-  return this.map;
+  return this._map;
 };
 
 LeafletCoordSys.prototype.dataToPoint = function(data) {
@@ -133,9 +133,23 @@ LeafletCoordSys.create = function(ecModel, api) {
       root.appendChild(mapRoot);
       let map = leafletModel.__map = L.map(mapRoot);
       let tile = leafletModel.get('tile');
-      L.tileLayer(tile.url, {
-        attribution: tile.attribution,
-      }).addTo(map);
+      var baseLayers = {};
+	    if(tile.url instanceof Array){
+	        if(tile.url.length >= 2 &&  (tile.url[0] instanceof Array && tile.url[1] instanceof Array) ){
+	            for(var i = 0; i < tile.url[0].length; i++) {
+	                baseLayers[tile.url[0][i]] = L.tileLayer(tile.url[1][i], { attribution: tile.attribution }).addTo(map);
+	            }
+	        } else {
+	            for(var i = 0; i < tile.url.length; i++) {
+	                baseLayers[i] = L.tileLayer(tile.url[i], { attribution: tile.attribution }).addTo(map);
+	            }
+	        }
+	        L.control.layers(baseLayers,{}, { position: "topleft" }).addTo(map);
+	    } else {
+	        L.tileLayer(tile.url, {
+	            attribution: tile.attribution
+	        }).addTo(map);
+	    }
 
       new L.CustomOverlay(viewportRoot).addTo(map);
     }

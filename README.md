@@ -31,6 +31,23 @@ option = {
     coordinateSystem: 'leaflet',
   }]
 }
+
+options = {
+	leaflet: {
+		...
+		tile: [
+	        ['天地图','地图'],
+	        ['http://t2.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}', 'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png']
+        ],
+//      url: [
+//	        ['天地图','天地图'],
+//	        ['http://t2.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}', 'http://t3.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}']
+//      ],
+        ...
+	},
+	...
+}
+
 ```
 
 ## Demo
