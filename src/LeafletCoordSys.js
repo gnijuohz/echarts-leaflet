@@ -160,10 +160,22 @@ LeafletCoordSys.create = function (ecModel, api) {
             root.appendChild(mapRoot);
             var map = leafletModel.__map = new L.map(mapRoot);
             var tile = leafletModel.get('tile');
-            L.tileLayer(tile.url, {
-                attribution: tile.attribution
-            }).addTo(map);
-
+            if(tile.url instanceof Object) {
+                L.control.layers(tile.url,{}, {
+			        position: "topleft"
+			    }).addTo(map);
+            } else if(tile.url instanceof Array){
+                for(var i = 0; i < tile.url.length; i++) {
+                    baseLayers[i] = L.tileLayer(tile.url[i], { attribution: tile.attribution }).addTo(map);
+                    L.control.layers(baseLayers,{}, {
+                        position: "topleft"
+                    }).addTo(map);
+                }
+            } else {
+                L.tileLayer(tile.url, {
+                    attribution: tile.attribution
+                }).addTo(map);
+            }
             var overlay = new L.CustomOverlay(viewportRoot).addTo(map);
         }
         var map = leafletModel.__map;
