@@ -14,7 +14,7 @@ export default echarts.extendComponentModel({
   type: 'leaflet',
 
   getLeaflet: function() {
-    // __map is injected when creating BMapCoordSys
+    // __map is injected when creating LeafletCoordSys
     return this.__map;
   },
 
@@ -33,9 +33,10 @@ export default echarts.extendComponentModel({
     zoom: 2,
     mapStyle: {},
     roam: false,
-    tile: {
+    layerControl: {},
+    tiles: [{
       url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-    },
+    }],
   },
 });

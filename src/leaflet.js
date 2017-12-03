@@ -10,7 +10,6 @@ import './LeafletView';
 
 echarts.registerCoordinateSystem('leaflet', LeafletCoordSys);
 
-
 echarts.registerAction({
   type: 'leafletRoam',
   event: 'leafletRoam',
