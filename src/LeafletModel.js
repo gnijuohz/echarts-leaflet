@@ -24,7 +24,7 @@ export default echarts.extendComponentModel({
   },
 
   centerOrZoomChanged: function(center, zoom) {
-    let option = this.option;
+    const option = this.option;
     return !(v2Equal(center, option.center) && zoom === option.zoom);
   },
 

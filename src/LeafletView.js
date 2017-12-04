@@ -6,14 +6,14 @@ export default echarts.extendComponentView({
   render: function(leafletModel, ecModel, api) {
     let rendering = true;
 
-    let leaflet = leafletModel.getLeaflet();
-    let viewportRoot = api.getZr().painter.getViewportRoot();
-    let coordSys = leafletModel.coordinateSystem;
-    let moveHandler = function(type, target) {
+    const leaflet = leafletModel.getLeaflet();
+    const viewportRoot = api.getZr().painter.getViewportRoot();
+    const coordSys = leafletModel.coordinateSystem;
+    const moveHandler = function(type, target) {
       if (rendering) {
         return;
       }
-      let offsetEl = viewportRoot.parentNode.parentNode;
+      const offsetEl = viewportRoot.parentNode.parentNode;
       // calculate new mapOffset
       let transformStyle = offsetEl.style.transform;
       let dx = 0;
@@ -28,8 +28,8 @@ export default echarts.extendComponentView({
         dy = -parseInt(offsetEl.style.top, 10);
       }
       let mapOffset = [dx, dy];
-      viewportRoot.style.left = mapOffset[0] + 'px';
-      viewportRoot.style.top = mapOffset[1] + 'px';
+      viewportRoot.style.left = `${mapOffset[0]}px`;
+      viewportRoot.style.top = `${mapOffset[1]}px`;
 
       coordSys.setMapOffset(mapOffset);
       leafletModel.__mapOffset = mapOffset;
@@ -68,7 +68,7 @@ export default echarts.extendComponentView({
     this._oldZoomEndHandler = zoomHandler;
     this._oldZoomEndHandler = zoomEndHandler;
 
-    let roam = leafletModel.get('roam');
+    const roam = leafletModel.get('roam');
     if (roam && roam !== 'scale') {
       leaflet.dragging.enable();
     } else {

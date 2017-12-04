@@ -36,14 +36,14 @@ LeafletCoordSys.prototype.getLeaflet = function() {
 };
 
 LeafletCoordSys.prototype.dataToPoint = function(data) {
-  let point = new L.LatLng(data[1], data[0]);
-  let px = this._map.latLngToLayerPoint(point);
-  let mapOffset = this._mapOffset;
+  const point = new L.LatLng(data[1], data[0]);
+  const px = this._map.latLngToLayerPoint(point);
+  const mapOffset = this._mapOffset;
   return [px.x - mapOffset[0], px.y - mapOffset[1]];
 };
 
 LeafletCoordSys.prototype.pointToData = function(pt) {
-  let mapOffset = this._mapOffset;
+  const mapOffset = this._mapOffset;
   const coord = this._map.layerPointToLatLng({
     x: pt[0] + mapOffset[0],
     y: pt[1] + mapOffset[1],
@@ -52,7 +52,7 @@ LeafletCoordSys.prototype.pointToData = function(pt) {
 };
 
 LeafletCoordSys.prototype.getViewRect = function() {
-  let api = this._api;
+  const api = this._api;
   return new echarts.graphic.BoundingRect(0, 0, api.getWidth(), api.getHeight());
 };
 
@@ -99,7 +99,7 @@ L.CustomOverlay = L.Layer.extend({
 
 LeafletCoordSys.create = function(ecModel, api) {
   let leafletCoordSys;
-  let root = api.getDom();
+  const root = api.getDom();
 
   // TODO Dispose
   ecModel.eachComponent('leaflet', function(leafletModel) {
@@ -189,7 +189,7 @@ echarts.extendComponentModel({
   },
 
   centerOrZoomChanged: function(center, zoom) {
-    let option = this.option;
+    const option = this.option;
     return !(v2Equal(center, option.center) && zoom === option.zoom);
   },
 
@@ -212,14 +212,14 @@ echarts.extendComponentView({
   render: function(leafletModel, ecModel, api) {
     let rendering = true;
 
-    let leaflet = leafletModel.getLeaflet();
-    let viewportRoot = api.getZr().painter.getViewportRoot();
-    let coordSys = leafletModel.coordinateSystem;
-    let moveHandler = function(type, target) {
+    const leaflet = leafletModel.getLeaflet();
+    const viewportRoot = api.getZr().painter.getViewportRoot();
+    const coordSys = leafletModel.coordinateSystem;
+    const moveHandler = function(type, target) {
       if (rendering) {
         return;
       }
-      let offsetEl = viewportRoot.parentNode.parentNode;
+      const offsetEl = viewportRoot.parentNode.parentNode;
       // calculate new mapOffset
       let transformStyle = offsetEl.style.transform;
       let dx = 0;
@@ -234,8 +234,8 @@ echarts.extendComponentView({
         dy = -parseInt(offsetEl.style.top, 10);
       }
       let mapOffset = [dx, dy];
-      viewportRoot.style.left = mapOffset[0] + 'px';
-      viewportRoot.style.top = mapOffset[1] + 'px';
+      viewportRoot.style.left = `${mapOffset[0]}px`;
+      viewportRoot.style.top = `${mapOffset[1]}px`;
 
       coordSys.setMapOffset(mapOffset);
       leafletModel.__mapOffset = mapOffset;
@@ -274,7 +274,7 @@ echarts.extendComponentView({
     this._oldZoomEndHandler = zoomHandler;
     this._oldZoomEndHandler = zoomEndHandler;
 
-    let roam = leafletModel.get('roam');
+    const roam = leafletModel.get('roam');
     if (roam && roam !== 'scale') {
       leaflet.dragging.enable();
     } else {

@@ -37,14 +37,14 @@ LeafletCoordSys.prototype.getLeaflet = function() {
 };
 
 LeafletCoordSys.prototype.dataToPoint = function(data) {
-  let point = new L.LatLng(data[1], data[0]);
-  let px = this._map.latLngToLayerPoint(point);
-  let mapOffset = this._mapOffset;
+  const point = new L.LatLng(data[1], data[0]);
+  const px = this._map.latLngToLayerPoint(point);
+  const mapOffset = this._mapOffset;
   return [px.x - mapOffset[0], px.y - mapOffset[1]];
 };
 
 LeafletCoordSys.prototype.pointToData = function(pt) {
-  let mapOffset = this._mapOffset;
+  const mapOffset = this._mapOffset;
   const coord = this._map.layerPointToLatLng({
     x: pt[0] + mapOffset[0],
     y: pt[1] + mapOffset[1],
@@ -53,7 +53,7 @@ LeafletCoordSys.prototype.pointToData = function(pt) {
 };
 
 LeafletCoordSys.prototype.getViewRect = function() {
-  let api = this._api;
+  const api = this._api;
   return new graphic.BoundingRect(0, 0, api.getWidth(), api.getHeight());
 };
 
@@ -100,7 +100,7 @@ L.CustomOverlay = L.Layer.extend({
 
 LeafletCoordSys.create = function(ecModel, api) {
   let leafletCoordSys;
-  let root = api.getDom();
+  const root = api.getDom();
 
   // TODO Dispose
   ecModel.eachComponent('leaflet', function(leafletModel) {
