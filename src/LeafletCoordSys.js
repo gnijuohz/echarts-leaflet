@@ -130,9 +130,8 @@ LeafletCoordSys.create = function(ecModel, api) {
       const tiles = leafletModel.get('tiles');
       let baseLayers = {};
       for (let tile of tiles) {
-        baseLayers[tile.text] = L.tileLayer(tile.url, {
-          attribution: tile.attribution,
-        }).addTo(map);
+        let tileLayer = L.tileLayer(tile.urlTemplate, tile.options).addTo(map);
+        if (tile.label) baseLayers[tile.label] = tileLayer;
       }
       // add layer control when there are more than two layers
       if (tiles.length > 1) {

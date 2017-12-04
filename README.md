@@ -28,9 +28,11 @@ option = {
       zoom: 3,
       roam: true,
       tiles: [{
-        text: 'OpenStreetMap',
-        url: 'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, Tiles courtesy of <a href="http://hot.openstreetmap.org/" target="_blank">Humanitarian OpenStreetMap Team</a>'
+        label: 'OpenStreetMap',
+        urlTemplate: 'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
+        options: {
+          attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, Tiles courtesy of <a href="http://hot.openstreetmap.org/" target="_blank">Humanitarian OpenStreetMap Team</a>'
+        }
       }]
   },
   series: [{
@@ -46,13 +48,17 @@ Specify multiple layers:
     position: 'topleft'
   },
   tiles: [{
-    text: '天地图',
-    url: 'http://t2.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}',
-    attribution: 'tianditu.com'
+    label: '天地图',
+    urlTemplate: 'http://t2.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}',
+    options: {
+      attribution: 'tianditu.com'
+    }
   }, {
-    text: 'Open Street Map',
-    url: 'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, Tiles courtesy of <a href="http://hot.openstreetmap.org/" target="_blank">Humanitarian OpenStreetMap Team</a>'
+    label: 'Open Street Map',
+    urlTemplate: 'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
+    options: {
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, Tiles courtesy of <a href="http://hot.openstreetmap.org/" target="_blank">Humanitarian OpenStreetMap Team</a>'
+    }
   }]
 }
 ```
@@ -63,7 +69,8 @@ Specify multiple layers:
 
 ## Build
 
-`rollup --config`
+- `npm install`
+- `rollup --config`
 
 ## License
 

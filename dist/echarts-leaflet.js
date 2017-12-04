@@ -136,9 +136,8 @@ LeafletCoordSys.create = function (ecModel, api) {
         for (var _iterator = tiles[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
           var tile = _step.value;
 
-          baseLayers[tile.text] = L.tileLayer(tile.url, {
-            attribution: tile.attribution
-          }).addTo(_map);
+          var tileLayer = L.tileLayer(tile.urlTemplate, tile.options).addTo(_map);
+          if (tile.label) baseLayers[tile.label] = tileLayer;
         }
         // add layer control when there are more than two layers
       } catch (err) {
@@ -222,8 +221,10 @@ echarts.extendComponentModel({
     roam: false,
     layerControl: {},
     tiles: [{
-      url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
-      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+      urlTemplate: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
+      options: {
+        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+      }
     }]
   }
 });
