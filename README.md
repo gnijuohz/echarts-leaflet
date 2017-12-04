@@ -1,5 +1,7 @@
 # ECharts leaflet extension
 
+[![Build Status](https://travis-ci.org/gnijuohz/echarts-leaflet.svg?branch=master)](https://travis-ci.org/gnijuohz/echarts-leaflet)
+
 ## Usage
 
 ```html
@@ -39,24 +41,19 @@ option = {
 
 Specify multiple layers:
 ```javascript
-options = {
-	leaflet: {
-    ...
-		layerControl: {
-      position: 'topleft'
-    },
-    tiles: [{
-      text: '天地图',
-      url: 'http://t2.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}',
-      attribution: 'tianditu.com'
-    }, {
-      text: 'Open Street Map',
-      url: 'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
-      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, Tiles courtesy of <a href="http://hot.openstreetmap.org/" target="_blank">Humanitarian OpenStreetMap Team</a>'
-    }]
-    ...
-	},
-	...
+{
+  layerControl: {
+    position: 'topleft'
+  },
+  tiles: [{
+    text: '天地图',
+    url: 'http://t2.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}',
+    attribution: 'tianditu.com'
+  }, {
+    text: 'Open Street Map',
+    url: 'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, Tiles courtesy of <a href="http://hot.openstreetmap.org/" target="_blank">Humanitarian OpenStreetMap Team</a>'
+  }]
 }
 ```
 
@@ -67,3 +64,7 @@ options = {
 ## Build
 
 `rollup --config`
+
+## License
+
+MIT
