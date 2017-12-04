@@ -19,44 +19,44 @@ function LeafletCoordSys(map, api) {
 
 LeafletCoordSys.prototype.dimensions = ['lng', 'lat'];
 
-LeafletCoordSys.prototype.setZoom = function (zoom) {
+LeafletCoordSys.prototype.setZoom = function(zoom) {
   this._zoom = zoom;
 };
 
-LeafletCoordSys.prototype.setCenter = function (center) {
+LeafletCoordSys.prototype.setCenter = function(center) {
   this._center = this._projection.project(new L.LatLng(center[1], center[0]));
 };
 
-LeafletCoordSys.prototype.setMapOffset = function (mapOffset) {
+LeafletCoordSys.prototype.setMapOffset = function(mapOffset) {
   this._mapOffset = mapOffset;
 };
 
-LeafletCoordSys.prototype.getLeaflet = function () {
+LeafletCoordSys.prototype.getLeaflet = function() {
   return this._map;
 };
 
-LeafletCoordSys.prototype.dataToPoint = function (data) {
-  var point = new L.LatLng(data[1], data[0]);
-  var px = this._map.latLngToLayerPoint(point);
-  var mapOffset = this._mapOffset;
+LeafletCoordSys.prototype.dataToPoint = function(data) {
+  let point = new L.LatLng(data[1], data[0]);
+  let px = this._map.latLngToLayerPoint(point);
+  let mapOffset = this._mapOffset;
   return [px.x - mapOffset[0], px.y - mapOffset[1]];
 };
 
-LeafletCoordSys.prototype.pointToData = function (pt) {
-  var mapOffset = this._mapOffset;
-  var coord = this._map.layerPointToLatLng({
+LeafletCoordSys.prototype.pointToData = function(pt) {
+  let mapOffset = this._mapOffset;
+  const coord = this._map.layerPointToLatLng({
     x: pt[0] + mapOffset[0],
-    y: pt[1] + mapOffset[1]
+    y: pt[1] + mapOffset[1],
   });
   return [coord.lng, coord.lat];
 };
 
-LeafletCoordSys.prototype.getViewRect = function () {
-  var api = this._api;
+LeafletCoordSys.prototype.getViewRect = function() {
+  let api = this._api;
   return new echarts.graphic.BoundingRect(0, 0, api.getWidth(), api.getHeight());
 };
 
-LeafletCoordSys.prototype.getRoamTransform = function () {
+LeafletCoordSys.prototype.getRoamTransform = function() {
   return echarts.matrix.create();
 };
 
@@ -64,12 +64,12 @@ LeafletCoordSys.dimensions = LeafletCoordSys.prototype.dimensions;
 
 L.CustomOverlay = L.Layer.extend({
 
-  initialize: function initialize(container) {
+  initialize: function(container) {
     this._container = container;
   },
 
-  onAdd: function onAdd(map) {
-    var pane = map.getPane(this.options.pane);
+  onAdd: function(map) {
+    let pane = map.getPane(this.options.pane);
     pane.appendChild(this._container);
 
     // Calculate initial position of container with
@@ -83,27 +83,27 @@ L.CustomOverlay = L.Layer.extend({
     // map.on('zoomend viewreset', this._update, this);
   },
 
-  onRemove: function onRemove(map) {
+  onRemove: function(map) {
     L.DomUtil.remove(this._container);
     // map.off('zoomend viewreset', this._update, this);
   },
 
-  _update: function _update() {
+  _update: function() {
     // Recalculate position of container
 
     // L.DomUtil.setPosition(this._container, point);
 
     // Add/remove/reposition children elements if needed
-  }
+  },
 });
 
-LeafletCoordSys.create = function (ecModel, api) {
-  var leafletCoordSys = void 0;
-  var root = api.getDom();
+LeafletCoordSys.create = function(ecModel, api) {
+  let leafletCoordSys;
+  let root = api.getDom();
 
   // TODO Dispose
-  ecModel.eachComponent('leaflet', function (leafletModel) {
-    var viewportRoot = api.getZr().painter.getViewportRoot();
+  ecModel.eachComponent('leaflet', function(leafletModel) {
+    let viewportRoot = api.getZr().painter.getViewportRoot();
     if (typeof L === 'undefined') {
       throw new Error('Leaflet api is not loaded');
     }
@@ -112,7 +112,7 @@ LeafletCoordSys.create = function (ecModel, api) {
     }
     if (!leafletModel.__map) {
       // Not support IE8
-      var mapRoot = root.querySelector('.ec-extension-leaflet');
+      let mapRoot = root.querySelector('.ec-extension-leaflet');
       if (mapRoot) {
         // Reset viewport left and top, which will be changed
         // in moving handler in LeafletView
@@ -125,49 +125,27 @@ LeafletCoordSys.create = function (ecModel, api) {
       // Not support IE8
       mapRoot.classList.add('ec-extension-leaflet');
       root.appendChild(mapRoot);
-      var _map = leafletModel.__map = L.map(mapRoot);
-      var tiles = leafletModel.get('tiles');
-      var baseLayers = {};
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
-
-      try {
-        for (var _iterator = tiles[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var tile = _step.value;
-
-          baseLayers[tile.text] = L.tileLayer(tile.url, {
-            attribution: tile.attribution
-          }).addTo(_map);
-        }
-        // add layer control when there are more than two layers
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator.return) {
-            _iterator.return();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
-        }
+      let map = leafletModel.__map = L.map(mapRoot);
+      const tiles = leafletModel.get('tiles');
+      let baseLayers = {};
+      for (let tile of tiles) {
+        baseLayers[tile.text] = L.tileLayer(tile.url, {
+          attribution: tile.attribution,
+        }).addTo(map);
       }
-
+      // add layer control when there are more than two layers
       if (tiles.length > 1) {
-        var layerControlOpts = leafletModel.get('layerControl');
-        L.control.layers(baseLayers, {}, layerControlOpts).addTo(_map);
+        const layerControlOpts = leafletModel.get('layerControl');
+        L.control.layers(baseLayers, {}, layerControlOpts).addTo(map);
       }
-      new L.CustomOverlay(viewportRoot).addTo(_map);
+      new L.CustomOverlay(viewportRoot).addTo(map);
     }
-    var map = leafletModel.__map;
+    let map = leafletModel.__map;
 
     // Set leaflet options
     // centerAndZoom before layout and render
-    var center = leafletModel.get('center');
-    var zoom = leafletModel.get('zoom');
+    const center = leafletModel.get('center');
+    const zoom = leafletModel.get('zoom');
     if (center && zoom) {
       map.setView([center[1], center[0]], zoom);
     }
@@ -180,7 +158,7 @@ LeafletCoordSys.create = function (ecModel, api) {
     leafletModel.coordinateSystem = leafletCoordSys;
   });
 
-  ecModel.eachSeries(function (seriesModel) {
+  ecModel.eachSeries(function(seriesModel) {
     if (seriesModel.get('coordinateSystem') === 'leaflet') {
       seriesModel.coordinateSystem = leafletCoordSys;
     }
@@ -200,18 +178,18 @@ function v2Equal(a, b) {
 echarts.extendComponentModel({
   type: 'leaflet',
 
-  getLeaflet: function getLeaflet() {
+  getLeaflet: function() {
     // __map is injected when creating LeafletCoordSys
     return this.__map;
   },
 
-  setCenterAndZoom: function setCenterAndZoom(center, zoom) {
+  setCenterAndZoom: function(center, zoom) {
     this.option.center = center;
     this.option.zoom = zoom;
   },
 
-  centerOrZoomChanged: function centerOrZoomChanged(center, zoom) {
-    var option = this.option;
+  centerOrZoomChanged: function(center, zoom) {
+    let option = this.option;
     return !(v2Equal(center, option.center) && zoom === option.zoom);
   },
 
@@ -223,40 +201,39 @@ echarts.extendComponentModel({
     layerControl: {},
     tiles: [{
       url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
-      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-    }]
-  }
+      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+    }],
+  },
 });
 
 echarts.extendComponentView({
   type: 'leaflet',
 
-  render: function render(leafletModel, ecModel, api) {
-    var rendering = true;
+  render: function(leafletModel, ecModel, api) {
+    let rendering = true;
 
-    var leaflet = leafletModel.getLeaflet();
-    var viewportRoot = api.getZr().painter.getViewportRoot();
-    var coordSys = leafletModel.coordinateSystem;
-    var moveHandler = function moveHandler(type, target) {
+    let leaflet = leafletModel.getLeaflet();
+    let viewportRoot = api.getZr().painter.getViewportRoot();
+    let coordSys = leafletModel.coordinateSystem;
+    let moveHandler = function(type, target) {
       if (rendering) {
         return;
       }
-      var offsetEl = viewportRoot.parentNode.parentNode;
+      let offsetEl = viewportRoot.parentNode.parentNode;
       // calculate new mapOffset
-      var transformStyle = offsetEl.style.transform;
-      var dx = 0;
-      var dy = 0;
+      let transformStyle = offsetEl.style.transform;
+      let dx = 0;
+      let dy = 0;
       if (transformStyle) {
         transformStyle = transformStyle.replace('translate3d(', '');
-        var parts = transformStyle.split(',');
+        let parts = transformStyle.split(',');
         dx = -parseInt(parts[0], 10);
         dy = -parseInt(parts[1], 10);
-      } else {
-        // browsers that don't support transform: matrix
+      } else { // browsers that don't support transform: matrix
         dx = -parseInt(offsetEl.style.left, 10);
         dy = -parseInt(offsetEl.style.top, 10);
       }
-      var mapOffset = [dx, dy];
+      let mapOffset = [dx, dy];
       viewportRoot.style.left = mapOffset[0] + 'px';
       viewportRoot.style.top = mapOffset[1] + 'px';
 
@@ -264,7 +241,7 @@ echarts.extendComponentView({
       leafletModel.__mapOffset = mapOffset;
 
       api.dispatchAction({
-        type: 'leafletRoam'
+        type: 'leafletRoam',
       });
     };
 
@@ -274,7 +251,7 @@ echarts.extendComponentView({
     function zoomEndHandler() {
       if (rendering) return;
       api.dispatchAction({
-        type: 'leafletRoam'
+        type: 'leafletRoam',
       });
     }
 
@@ -297,7 +274,7 @@ echarts.extendComponentView({
     this._oldZoomEndHandler = zoomHandler;
     this._oldZoomEndHandler = zoomEndHandler;
 
-    var roam = leafletModel.get('roam');
+    let roam = leafletModel.get('roam');
     if (roam && roam !== 'scale') {
       leaflet.dragging.enable();
     } else {
@@ -314,7 +291,7 @@ echarts.extendComponentView({
     }
 
     rendering = false;
-  }
+  },
 });
 
 /**
@@ -326,16 +303,16 @@ echarts.registerCoordinateSystem('leaflet', LeafletCoordSys);
 echarts.registerAction({
   type: 'leafletRoam',
   event: 'leafletRoam',
-  update: 'updateLayout'
-}, function (payload, ecModel) {
-  ecModel.eachComponent('leaflet', function (leafletModel) {
-    var leaflet = leafletModel.getLeaflet();
-    var center = leaflet.getCenter();
+  update: 'updateLayout',
+}, function(payload, ecModel) {
+  ecModel.eachComponent('leaflet', function(leafletModel) {
+    const leaflet = leafletModel.getLeaflet();
+    const center = leaflet.getCenter();
     leafletModel.setCenterAndZoom([center.lng, center.lat], leaflet.getZoom());
   });
 });
 
-var version = '1.0.0';
+const version='1.0.0';
 
 exports.version = version;
 
