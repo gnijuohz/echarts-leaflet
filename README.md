@@ -16,10 +16,9 @@
 ## ECharts Option
 
 You can use one or more tile layers via the `tiles` option. It's an array of
-layers. You can specify the options of layer control when you have more than 1
-layer.
+layers.
 
-The default tile layer is `http://{s}.tile.osm.org/{z}/{x}/{y}.png`
+The default tile layer uses `http://{s}.tile.osm.org/{z}/{x}/{y}.png`
 
 ```javascript
 option = {
@@ -41,7 +40,8 @@ option = {
 }
 ```
 
-Specify multiple layers:
+Specify multiple layers. You can choose a base layer to use via the layer control.
+
 ```javascript
 {
   layerControl: {
@@ -62,6 +62,29 @@ Specify multiple layers:
   }]
 }
 ```
+
+If you don't specify a label for a tile, it won't show up in the layer control. Therefore the following option will add two base layers to the map and there is no way to switch between them.
+
+```javascript
+{
+  layerControl: {
+    position: 'topleft'
+  },
+  tiles: [{
+    urlTemplate: 'http://t2.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}',
+    options: {
+      attribution: 'tianditu.com'
+    }
+  }, {
+    urlTemplate: 'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
+    options: {
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, Tiles courtesy of <a href="http://hot.openstreetmap.org/" target="_blank">Humanitarian OpenStreetMap Team</a>'
+    }
+  }]
+}
+```
+
+
 
 ## Demo
 

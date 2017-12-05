@@ -128,6 +128,7 @@ LeafletCoordSys.create = function (ecModel, api) {
       var _map = leafletModel.__map = L.map(mapRoot);
       var tiles = leafletModel.get('tiles');
       var baseLayers = {};
+      var baseLayerAdded = false;
       var _iteratorNormalCompletion = true;
       var _didIteratorError = false;
       var _iteratorError = undefined;
@@ -136,8 +137,18 @@ LeafletCoordSys.create = function (ecModel, api) {
         for (var _iterator = tiles[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
           var tile = _step.value;
 
-          var tileLayer = L.tileLayer(tile.urlTemplate, tile.options).addTo(_map);
-          if (tile.label) baseLayers[tile.label] = tileLayer;
+          var tileLayer = L.tileLayer(tile.urlTemplate, tile.options);
+          if (tile.label) {
+            // only add one baseLayer
+            if (!baseLayerAdded) {
+              tileLayer.addTo(_map);
+              baseLayerAdded = true;
+            }
+            baseLayers[tile.label] = tileLayer;
+          } else {
+            // add all tiles without labels into the map
+            tileLayer.addTo(_map);
+          }
         }
         // add layer control when there are more than two layers
       } catch (err) {
@@ -155,7 +166,7 @@ LeafletCoordSys.create = function (ecModel, api) {
         }
       }
 
-      if (tiles.length > 1) {
+      if (Object(tiles).keys().length > 1) {
         var layerControlOpts = leafletModel.get('layerControl');
         L.control.layers(baseLayers, {}, layerControlOpts).addTo(_map);
       }
@@ -299,11 +310,13 @@ echarts.extendComponentView({
     this._oldZoomEndHandler = zoomEndHandler;
 
     var roam = leafletModel.get('roam');
+    // can move
     if (roam && roam !== 'scale') {
       leaflet.dragging.enable();
     } else {
       leaflet.dragging.disable();
     }
+    // can zoom (may need to be more fine-grained)
     if (roam && roam !== 'move') {
       leaflet.scrollWheelZoom.enable();
       leaflet.doubleClickZoom.enable();

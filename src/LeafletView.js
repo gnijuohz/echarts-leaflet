@@ -69,11 +69,13 @@ export default echarts.extendComponentView({
     this._oldZoomEndHandler = zoomEndHandler;
 
     const roam = leafletModel.get('roam');
+    // can move
     if (roam && roam !== 'scale') {
       leaflet.dragging.enable();
     } else {
       leaflet.dragging.disable();
     }
+    // can zoom (may need to be more fine-grained)
     if (roam && roam !== 'move') {
       leaflet.scrollWheelZoom.enable();
       leaflet.doubleClickZoom.enable();

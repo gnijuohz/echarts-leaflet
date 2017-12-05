@@ -1,6 +1,5 @@
 
 import {
-  // util as zrUtil,
   graphic,
   matrix,
 } from 'echarts';
@@ -129,12 +128,22 @@ LeafletCoordSys.create = function(ecModel, api) {
       let map = leafletModel.__map = L.map(mapRoot);
       const tiles = leafletModel.get('tiles');
       let baseLayers = {};
+      let baseLayerAdded = false;
       for (let tile of tiles) {
-        let tileLayer = L.tileLayer(tile.urlTemplate, tile.options).addTo(map);
-        if (tile.label) baseLayers[tile.label] = tileLayer;
+        let tileLayer = L.tileLayer(tile.urlTemplate, tile.options);
+        if (tile.label) {
+          // only add one baseLayer
+          if (!baseLayerAdded) {
+            tileLayer.addTo(map);
+            baseLayerAdded = true;
+          }
+          baseLayers[tile.label] = tileLayer;
+        } else { // add all tiles without labels into the map
+          tileLayer.addTo(map);
+        }
       }
       // add layer control when there are more than two layers
-      if (tiles.length > 1) {
+      if (Object(tiles).keys().length > 1) {
         const layerControlOpts = leafletModel.get('layerControl');
         L.control.layers(baseLayers, {}, layerControlOpts).addTo(map);
       }
