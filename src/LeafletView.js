@@ -23,7 +23,8 @@ export default echarts.extendComponentView({
         let parts = transformStyle.split(',');
         dx = -parseInt(parts[0], 10);
         dy = -parseInt(parts[1], 10);
-      } else { // browsers that don't support transform: matrix
+      } else {
+        // browsers that don't support transform: matrix
         dx = -parseInt(offsetEl.style.left, 10);
         dy = -parseInt(offsetEl.style.top, 10);
       }

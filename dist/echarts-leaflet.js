@@ -2,7 +2,7 @@
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('echarts')) :
 	typeof define === 'function' && define.amd ? define(['exports', 'echarts'], factory) :
 	(factory((global.leaflet = {}),global.echarts));
-}(this, (function (exports,echarts) { 'use strict';
+}(this, (function (exports,echarts$1) { 'use strict';
 
 /**
  * constructor for Leaflet CoordSys
@@ -51,19 +51,32 @@ LeafletCoordSys.prototype.pointToData = function (pt) {
   return [coord.lng, coord.lat];
 };
 
+LeafletCoordSys.prototype.convertToPixel = echarts.util.curry(doConvert, 'dataToPoint');
+
+LeafletCoordSys.prototype.convertFromPixel = echarts.util.curry(doConvert, 'pointToData');
+
+function doConvert(methodName, ecModel, finder, value) {
+  var leafletModel = finder.leafletModel;
+  var seriesModel = finder.seriesModel;
+
+  var coordSys = leafletModel ? leafletModel.coordinateSystem : seriesModel ? seriesModel.coordinateSystem // For map.
+  || (seriesModel.getReferringComponents('leaflet')[0] || {}).coordinateSystem : null;
+
+  return coordSys === this ? coordSys[methodName](value) : null;
+}
+
 LeafletCoordSys.prototype.getViewRect = function () {
   var api = this._api;
-  return new echarts.graphic.BoundingRect(0, 0, api.getWidth(), api.getHeight());
+  return new echarts$1.util.BoundingRect(0, 0, api.getWidth(), api.getHeight());
 };
 
 LeafletCoordSys.prototype.getRoamTransform = function () {
-  return echarts.matrix.create();
+  return echarts$1.matrix.create();
 };
 
 LeafletCoordSys.dimensions = LeafletCoordSys.prototype.dimensions;
 
 L.CustomOverlay = L.Layer.extend({
-
   initialize: function initialize(container) {
     this._container = container;
   },
@@ -90,15 +103,14 @@ L.CustomOverlay = L.Layer.extend({
 
   _update: function _update() {
     // Recalculate position of container
-
     // L.DomUtil.setPosition(this._container, point);
-
     // Add/remove/reposition children elements if needed
   }
 });
 
 LeafletCoordSys.create = function (ecModel, api) {
   var leafletCoordSys = void 0;
+  var leafletList = [];
   var root = api.getDom();
 
   // TODO Dispose
@@ -183,6 +195,7 @@ LeafletCoordSys.create = function (ecModel, api) {
     }
 
     leafletCoordSys = new LeafletCoordSys(map, api);
+    leafletList.push(leafletCoordSys);
     leafletCoordSys.setMapOffset(leafletModel.__mapOffset || [0, 0]);
     leafletCoordSys.setZoom(zoom);
     leafletCoordSys.setCenter(center);
@@ -195,6 +208,8 @@ LeafletCoordSys.create = function (ecModel, api) {
       seriesModel.coordinateSystem = leafletCoordSys;
     }
   });
+
+  return leafletList;
 };
 
 /**
@@ -207,7 +222,7 @@ function v2Equal(a, b) {
   return a && b && a[0] === b[0] && a[1] === b[1];
 }
 
-echarts.extendComponentModel({
+echarts$1.extendComponentModel({
   type: 'leaflet',
 
   getLeaflet: function getLeaflet() {
@@ -240,7 +255,7 @@ echarts.extendComponentModel({
   }
 });
 
-echarts.extendComponentView({
+echarts$1.extendComponentView({
   type: 'leaflet',
 
   render: function render(leafletModel, ecModel, api) {
@@ -335,9 +350,9 @@ echarts.extendComponentView({
  * Leftlet component extension
  */
 
-echarts.registerCoordinateSystem('leaflet', LeafletCoordSys);
+echarts$1.registerCoordinateSystem('leaflet', LeafletCoordSys);
 
-echarts.registerAction({
+echarts$1.registerAction({
   type: 'leafletRoam',
   event: 'leafletRoam',
   update: 'updateLayout'

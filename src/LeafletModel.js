@@ -34,11 +34,14 @@ export default echarts.extendComponentModel({
     mapStyle: {},
     roam: false,
     layerControl: {},
-    tiles: [{
-      urlTemplate: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
-      options: {
-        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+    tiles: [
+      {
+        urlTemplate: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
+        options: {
+          attribution:
+            '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+        },
       },
-    }],
+    ],
   },
 });

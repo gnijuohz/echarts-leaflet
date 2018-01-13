@@ -1,9 +1,4 @@
-
-import {
-  graphic,
-  matrix,
-} from 'echarts';
-
+import { util as graphic, matrix } from 'echarts';
 /**
  * constructor for Leaflet CoordSys
  * @param {L.map} map
@@ -51,6 +46,39 @@ LeafletCoordSys.prototype.pointToData = function(pt) {
   return [coord.lng, coord.lat];
 };
 
+LeafletCoordSys.prototype.convertToPixel = echarts.util.curry(
+  doConvert,
+  'dataToPoint'
+);
+
+LeafletCoordSys.prototype.convertFromPixel = echarts.util.curry(
+  doConvert,
+  'pointToData'
+);
+
+/**
+ * find appropriate coordinate system to convert
+ * @param {*} methodName
+ * @param {*} ecModel
+ * @param {*} finder
+ * @param {*} value
+ * @return {*} converted value
+ */
+function doConvert(methodName, ecModel, finder, value) {
+  let leafletModel = finder.leafletModel;
+  let seriesModel = finder.seriesModel;
+
+  let coordSys = leafletModel
+    ? leafletModel.coordinateSystem
+    : seriesModel
+      ? seriesModel.coordinateSystem || // For map.
+        (seriesModel.getReferringComponents('leaflet')[0] || {})
+          .coordinateSystem
+      : null;
+  /* eslint-disable no-invalid-this */
+  return coordSys === this ? coordSys[methodName](value) : null;
+}
+
 LeafletCoordSys.prototype.getViewRect = function() {
   const api = this._api;
   return new graphic.BoundingRect(0, 0, api.getWidth(), api.getHeight());
@@ -63,7 +91,6 @@ LeafletCoordSys.prototype.getRoamTransform = function() {
 LeafletCoordSys.dimensions = LeafletCoordSys.prototype.dimensions;
 
 L.CustomOverlay = L.Layer.extend({
-
   initialize: function(container) {
     this._container = container;
   },
@@ -90,15 +117,14 @@ L.CustomOverlay = L.Layer.extend({
 
   _update: function() {
     // Recalculate position of container
-
     // L.DomUtil.setPosition(this._container, point);
-
     // Add/remove/reposition children elements if needed
   },
 });
 
 LeafletCoordSys.create = function(ecModel, api) {
   let leafletCoordSys;
+  let leafletList = [];
   const root = api.getDom();
 
   // TODO Dispose
@@ -125,7 +151,7 @@ LeafletCoordSys.create = function(ecModel, api) {
       // Not support IE8
       mapRoot.classList.add('ec-extension-leaflet');
       root.appendChild(mapRoot);
-      let map = leafletModel.__map = L.map(mapRoot);
+      let map = (leafletModel.__map = L.map(mapRoot));
       const tiles = leafletModel.get('tiles');
       let baseLayers = {};
       let baseLayerAdded = false;
@@ -138,7 +164,8 @@ LeafletCoordSys.create = function(ecModel, api) {
             baseLayerAdded = true;
           }
           baseLayers[tile.label] = tileLayer;
-        } else { // add all tiles without labels into the map
+        } else {
+          // add all tiles without labels into the map
           tileLayer.addTo(map);
         }
       }
@@ -160,6 +187,7 @@ LeafletCoordSys.create = function(ecModel, api) {
     }
 
     leafletCoordSys = new LeafletCoordSys(map, api);
+    leafletList.push(leafletCoordSys);
     leafletCoordSys.setMapOffset(leafletModel.__mapOffset || [0, 0]);
     leafletCoordSys.setZoom(zoom);
     leafletCoordSys.setCenter(center);
@@ -172,6 +200,8 @@ LeafletCoordSys.create = function(ecModel, api) {
       seriesModel.coordinateSystem = leafletCoordSys;
     }
   });
+
+  return leafletList;
 };
 
 export default LeafletCoordSys;
