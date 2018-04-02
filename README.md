@@ -4,14 +4,30 @@
 
 ## Usage
 
+They are two ways to use this extension, and two examples in `example` foler demonstrate each approach.
+
+### Use it directly through script tag
+
 ```html
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.1.0/dist/leaflet.css" integrity="sha512-wcw6ts8Anuw10Mzh9Ytw4pylW8+NAD4ch3lqm9lzAsTxg0GFeJgoAtxuCLREZSC5lUXdVyo/7yfsqFjQ4S+aKw=="
-        crossorigin="" />
-<script type="text/javascript" src="./lib/echarts.min.js"></script>
-<script src="./lib/leaflet.js" integrity="sha512-mNqn2Wg7tSToJhvHcqfzLMU6J4mkOImSPTxVZAdo+lcPlk+GhZmYgACEe0x35K7YzW1zJ7XyJV/TT1MrdXvMcA=="
-    crossorigin=""></script>
-<script type="text/javascript" src="../dist/echarts-leaflet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.1.0/dist/leaflet.css" integrity="sha512-wcw6ts8Anuw10Mzh9Ytw4pylW8+NAD4ch3lqm9lzAsTxg0GFeJgoAtxuCLREZSC5lUXdVyo/7yfsqFjQ4S+aKw==" crossorigin="" />
+<script src="./node_modules/echarts/dist/echarts-en.js"></script>
+<script src="./node_modules/leaflet/dist/leaflet.js"></script>
+<script src="../dist/echarts-leaflet.js"></script>
 ```
+
+See [this example](./example/leaflet-multiple-layers.html).
+
+### Use it as ES Module
+
+```
+import echarts from 'echarts/lib/echarts';
+import 'echarts/lib/chart/scatter';
+import 'echarts/lib/chart/effectScatter';
+
+import './echarts-leaflet';
+```
+
+See [this example](./example/leaflet-single-layer.html). To run it, use `parcel leaflet-single-layer.html`. The usage of parcel can be found [here](https://parceljs.org/).
 
 ## ECharts Option
 
@@ -85,15 +101,15 @@ If you don't specify a label for a tile, it won't show up in the layer control. 
 ```
 
 
-
 ## Demo
 
 - [全国空气质量(Air quality in China)](http://gnijuohz.github.io/echarts-leaflet/example/leaflet-multiple-layers.html)
 
 ## Build
 
-- `npm install`
+- `yarn install`
 - `rollup --config`
+
 
 ## License
 

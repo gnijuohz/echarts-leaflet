@@ -1,4 +1,4 @@
-import * as echarts from 'echarts';
+import echarts from 'echarts/lib/echarts';
 
 export default echarts.extendComponentView({
   type: 'leaflet',

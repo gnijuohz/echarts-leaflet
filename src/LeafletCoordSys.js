@@ -1,4 +1,5 @@
-import { util as graphic, matrix } from 'echarts';
+import { util, matrix } from 'echarts/lib/echarts';
+import L from 'leaflet/src/leaflet';
 /**
  * constructor for Leaflet CoordSys
  * @param {L.map} map
@@ -46,12 +47,12 @@ LeafletCoordSys.prototype.pointToData = function(pt) {
   return [coord.lng, coord.lat];
 };
 
-LeafletCoordSys.prototype.convertToPixel = echarts.util.curry(
+LeafletCoordSys.prototype.convertToPixel = util.curry(
   doConvert,
   'dataToPoint'
 );
 
-LeafletCoordSys.prototype.convertFromPixel = echarts.util.curry(
+LeafletCoordSys.prototype.convertFromPixel = util.curry(
   doConvert,
   'pointToData'
 );
@@ -81,7 +82,7 @@ function doConvert(methodName, ecModel, finder, value) {
 
 LeafletCoordSys.prototype.getViewRect = function() {
   const api = this._api;
-  return new graphic.BoundingRect(0, 0, api.getWidth(), api.getHeight());
+  return new util.BoundingRect(0, 0, api.getWidth(), api.getHeight());
 };
 
 LeafletCoordSys.prototype.getRoamTransform = function() {
@@ -90,7 +91,7 @@ LeafletCoordSys.prototype.getRoamTransform = function() {
 
 LeafletCoordSys.dimensions = LeafletCoordSys.prototype.dimensions;
 
-L.CustomOverlay = L.Layer.extend({
+const CustomOverlay = L.Layer.extend({
   initialize: function(container) {
     this._container = container;
   },
@@ -170,11 +171,11 @@ LeafletCoordSys.create = function(ecModel, api) {
         }
       }
       // add layer control when there are more than two layers
-      if (Object(tiles).keys().length > 1) {
+      if (tiles.length > 1) {
         const layerControlOpts = leafletModel.get('layerControl');
         L.control.layers(baseLayers, {}, layerControlOpts).addTo(map);
       }
-      new L.CustomOverlay(viewportRoot).addTo(map);
+      new CustomOverlay(viewportRoot).addTo(map);
     }
     let map = leafletModel.__map;
 

@@ -2,7 +2,7 @@
  * Leftlet component extension
  */
 
-import * as echarts from 'echarts';
+import echarts from 'echarts/lib/echarts';
 import LeafletCoordSys from './LeafletCoordSys';
 
 import './LeafletModel';

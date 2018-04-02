@@ -1,4 +1,4 @@
-import * as echarts from 'echarts';
+import echarts from 'echarts/lib/echarts';
 
 /**
  * compare if two arrays of length 2 are equal

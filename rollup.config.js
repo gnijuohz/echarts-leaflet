@@ -1,34 +1,55 @@
 import resolve from 'rollup-plugin-node-resolve';
 import babel from 'rollup-plugin-babel';
+import commonjs from 'rollup-plugin-commonjs';
 
-export default [
-  {
-    input: './src/leaflet.js',
-    external: ['echarts'],
-    output: {
-      name: 'leaflet',
-      format: 'umd',
-      globals: {
-        echarts: 'echarts',
-      },
-      file: './dist/echarts-leaflet.js',
+
+export default [{
+  input: './src/leaflet.js',
+  external: ['echarts/lib/echarts', 'leaflet/src/leaflet'],
+  output: {
+    name: 'leaflet',
+    format: 'umd',
+    globals: {
+      'echarts/lib/echarts': 'echarts',
+      'leaflet/src/leaflet': 'L',
     },
-    plugins: [
-      resolve(),
-      babel({
-        exclude: 'node_modules/**',
-      }),
-    ],
-  }, {
-    input: './src/leaflet.js',
-    external: ['echarts'],
-    output: {
-      name: 'leaflet',
-      format: 'umd',
-      globals: {
-        echarts: 'echarts',
-      },
-      file: './dist/echarts-leaflet.es6.js',
-    },
+    file: './dist/echarts-leaflet.js',
   },
-];
+  plugins: [
+    resolve(),
+    commonjs({
+      namedExports: {
+        'node_modules/echarts/lib/echarts.js': 'echarts',
+        'node_modules/leaflet/src/leaflet.js': 'L',
+      },
+    }),
+    babel({
+      exclude: 'node_modules/**',
+    }),
+  ],
+},
+{
+  input: './src/leaflet.js',
+  external: ['echarts/lib/echarts', 'leaflet/src/leaflet'],
+  output: {
+    name: 'leaflet',
+    format: 'es',
+    globals: {
+      'echarts/lib/echarts': 'echarts',
+      'leaflet/src/leaflet': 'L',
+    },
+    file: './dist/echarts-leaflet.esm.js',
+  },
+  plugins: [
+    resolve(),
+    commonjs({
+      namedExports: {
+        'node_modules/echarts/lib/echarts.js': 'echarts',
+        'node_modules/leaflet/src/leaflet.js': 'L',
+      },
+    }),
+    babel({
+      exclude: 'node_modules/**',
+    }),
+  ],
+}];

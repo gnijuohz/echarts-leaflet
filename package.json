@@ -2,14 +2,15 @@
   "name": "echarts-leaflet",
   "version": "1.0.0",
   "description": "leaflet extension for echarts",
-  "main": "index.js",
+  "main": "dist/echarts-leaflet.js",
+  "module": "dist/echarts-leaflet.esm.js",
   "scripts": {
     "lint": "./node_modules/.bin/eslint src/*.js"
   },
   "repository": "git@github.com:gnijuohz/echarts-leaflet.git",
   "author": "Jing Zhou <gnijuohz@gmail.com>",
   "license": "MIT",
-  "dependencies": {
+  "peerDependencies": {
     "echarts": "^3.6.2",
     "leaflet": "^1.1.0"
   },
@@ -20,6 +21,7 @@
     "eslint": "^4.12.1",
     "eslint-config-google": "^0.9.1",
     "rollup-plugin-babel": "^3.0.2",
+    "rollup-plugin-commonjs": "^9.1.0",
     "rollup-plugin-node-resolve": "^3.0.0"
   }
 }
