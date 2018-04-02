@@ -2,6 +2,10 @@
 # yarn lockfile v1
 
 
+echarts-leaflet@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/echarts-leaflet/-/echarts-leaflet-1.0.0.tgz#f021fd0a1125402621ef285b2d48ebacdc956927"
+
 echarts@^3.8.5:
   version "3.8.5"
   resolved "https://registry.yarnpkg.com/echarts/-/echarts-3.8.5.tgz#58e4a51d2743c6fb75257b0dc0a9cf9f5378ac0e"

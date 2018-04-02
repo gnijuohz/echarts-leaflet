@@ -2,7 +2,7 @@ import echarts from 'echarts/lib/echarts';
 import 'echarts/lib/chart/scatter';
 import 'echarts/lib/chart/effectScatter';
 
-import './echarts-leaflet';
+import 'echarts-leaflet/dist/echarts-leaflet';
 
 var data = [{
     name: '海门',

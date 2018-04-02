@@ -2,9 +2,13 @@
 
 [![Build Status](https://travis-ci.org/gnijuohz/echarts-leaflet.svg?branch=master)](https://travis-ci.org/gnijuohz/echarts-leaflet)
 
+## Install
+
+`npm i echarts-leaflet`
+
 ## Usage
 
-They are two ways to use this extension, and two examples in `example` foler demonstrate each approach.
+They are two ways to use this extension, and two examples in `example` folder demonstrate each approach.
 
 ### Use it directly through script tag
 
