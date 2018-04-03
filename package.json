@@ -1,6 +1,6 @@
 {
   "name": "echarts-leaflet",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "leaflet extension for echarts",
   "main": "dist/echarts-leaflet.js",
   "scripts": {
