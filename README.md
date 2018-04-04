@@ -28,7 +28,7 @@ import echarts from 'echarts/lib/echarts';
 import 'echarts/lib/chart/scatter';
 import 'echarts/lib/chart/effectScatter';
 
-import './echarts-leaflet';
+import 'echarts-leaflet';
 ```
 
 See [this example](./example/leaflet-single-layer.html). To run it, use `parcel leaflet-single-layer.html`. The usage of parcel can be found [here](https://parceljs.org/).
