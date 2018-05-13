@@ -78,7 +78,7 @@
 
   LeafletCoordSys.prototype.getViewRect = function () {
     var api = this._api;
-    return new echarts.util.BoundingRect(0, 0, api.getWidth(), api.getHeight());
+    return new echarts.graphic.BoundingRect(0, 0, api.getWidth(), api.getHeight());
   };
 
   LeafletCoordSys.prototype.getRoamTransform = function () {

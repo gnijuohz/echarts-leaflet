@@ -1,4 +1,4 @@
-import { util, matrix } from 'echarts/lib/echarts';
+import { util, graphic, matrix } from 'echarts/lib/echarts';
 import L from 'leaflet/src/leaflet';
 /**
  * constructor for Leaflet CoordSys
@@ -82,7 +82,7 @@ function doConvert(methodName, ecModel, finder, value) {
 
 LeafletCoordSys.prototype.getViewRect = function() {
   const api = this._api;
-  return new util.BoundingRect(0, 0, api.getWidth(), api.getHeight());
+  return new graphic.BoundingRect(0, 0, api.getWidth(), api.getHeight());
 };
 
 LeafletCoordSys.prototype.getRoamTransform = function() {
