@@ -1,6 +1,6 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('echarts/lib/echarts'), require('leaflet/src/leaflet')) :
-  typeof define === 'function' && define.amd ? define(['exports', 'echarts/lib/echarts', 'leaflet/src/leaflet'], factory) :
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('echarts/lib/echarts'), require('leaflet/src/Leaflet')) :
+  typeof define === 'function' && define.amd ? define(['exports', 'echarts/lib/echarts', 'leaflet/src/Leaflet'], factory) :
   (factory((global.leaflet = {}),global.echarts,global.L));
 }(this, (function (exports,echarts,L) { 'use strict';
 
