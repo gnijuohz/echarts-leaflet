@@ -4,14 +4,14 @@ import commonjs from 'rollup-plugin-commonjs';
 
 
 export default [{
-  input: './src/leaflet.js',
-  external: ['echarts/lib/echarts', 'leaflet/src/leaflet'],
+  input: './src/Leaflet.js',
+  external: ['echarts/lib/echarts', 'leaflet/src/Leaflet'],
   output: {
     name: 'leaflet',
     format: 'umd',
     globals: {
       'echarts/lib/echarts': 'echarts',
-      'leaflet/src/leaflet': 'L',
+      'leaflet/src/Leaflet': 'L',
     },
     file: './dist/echarts-leaflet.js',
   },
@@ -20,7 +20,7 @@ export default [{
     commonjs({
       namedExports: {
         'node_modules/echarts/lib/echarts.js': 'echarts',
-        'node_modules/leaflet/src/leaflet.js': 'L',
+        'node_modules/leaflet/src/Leaflet.js': 'L',
       },
     }),
     babel({
@@ -29,14 +29,14 @@ export default [{
   ],
 },
 {
-  input: './src/leaflet.js',
-  external: ['echarts/lib/echarts', 'leaflet/src/leaflet'],
+  input: './src/Leaflet.js',
+  external: ['echarts/lib/echarts', 'leaflet/src/Leaflet'],
   output: {
     name: 'leaflet',
     format: 'es',
     globals: {
       'echarts/lib/echarts': 'echarts',
-      'leaflet/src/leaflet': 'L',
+      'leaflet/src/Leaflet': 'L',
     },
     file: './dist/echarts-leaflet.esm.js',
   },
@@ -45,7 +45,7 @@ export default [{
     commonjs({
       namedExports: {
         'node_modules/echarts/lib/echarts.js': 'echarts',
-        'node_modules/leaflet/src/leaflet.js': 'L',
+        'node_modules/leaflet/src/Leaflet.js': 'L',
       },
     }),
     babel({
