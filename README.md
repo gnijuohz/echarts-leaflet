@@ -114,6 +114,11 @@ If you don't specify a label for a tile, it won't show up in the layer control. 
 - `yarn install`
 - `rollup --config`
 
+## Contributors
+
+- [Jing Zhou](https://github.com/gnijuohz)
+- [UltramanWeiLai](https://github.com/UltramanWeiLai)
+- [Poyoman39](https://github.com/Poyoman39)
 
 ## License
 
