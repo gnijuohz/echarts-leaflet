@@ -7,14 +7,14 @@ export default echarts.extendComponentView({
     let rendering = true;
 
     const leaflet = leafletModel.getLeaflet();
-    const viewportRoot = api.getZr().painter.getViewportRoot();
+    const moveContainer = api.getZr().painter.getViewportRoot().parentNode;
     const coordSys = leafletModel.coordinateSystem;
     
     function moveHandler(type, target) {
       if (rendering) {
         return;
       }
-      const offsetEl = viewportRoot.parentNode.parentNode;
+      const offsetEl = leaflet._mapPane;
       // calculate new mapOffset
       let transformStyle = offsetEl.style.transform;
       let dx = 0;
@@ -30,8 +30,8 @@ export default echarts.extendComponentView({
         dy = -parseInt(offsetEl.style.top, 10);
       }
       let mapOffset = [dx, dy];
-      viewportRoot.style.left = `${mapOffset[0]}px`;
-      viewportRoot.style.top = `${mapOffset[1]}px`;
+      moveContainer.style.left = `${mapOffset[0]}px`;
+      moveContainer.style.top = `${mapOffset[1]}px`;
 
       coordSys.setMapOffset(mapOffset);
       leafletModel.__mapOffset = mapOffset;
