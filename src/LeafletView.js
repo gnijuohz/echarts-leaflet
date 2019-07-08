@@ -9,8 +9,8 @@ export default echarts.extendComponentView({
     const leaflet = leafletModel.getLeaflet();
     const moveContainer = api.getZr().painter.getViewportRoot().parentNode;
     const coordSys = leafletModel.coordinateSystem;
-    
-    function moveHandler(type, target) {
+
+    const moveHandler = function(type, target) {
       if (rendering) {
         return;
       }
@@ -58,16 +58,16 @@ export default echarts.extendComponentView({
       moveHandler();
     }
 
-    if(this._oldMoveHandler){
+    if (this._oldMoveHandler) {
       leaflet.off('move', this._oldMoveHandler);
     }
-    if(this._oldZoomHandler){
+    if (this._oldZoomHandler) {
       leaflet.off('zoom', this._oldZoomHandler);
-    } 
-    if(this._oldZoomEndHandler){
+    }
+    if (this._oldZoomEndHandler) {
       leaflet.off('zoomend', this._oldZoomEndHandler);
-    } 
-    
+    }
+
     leaflet.on('move', moveHandler);
     leaflet.on('zoom', zoomHandler);
     leaflet.on('zoomend', zoomEndHandler);

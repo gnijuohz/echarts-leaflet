@@ -177,12 +177,15 @@ LeafletCoordSys.create = function(ecModel, api) {
       }
 
       /*
-       Encapsulate viewportRoot element into the parent element responsible for moving, avoiding direct manipulation of viewportRoot elements affecting related attributes such as offset.
+       Encapsulate viewportRoot element into
+       the parent element responsible for moving,
+       avoiding direct manipulation of viewportRoot elements
+       affecting related attributes such as offset.
       */
-      let moveContainer = document.createElement("div");
-      moveContainer.style = "position: relative;";
+      let moveContainer = document.createElement('div');
+      moveContainer.style = 'position: relative;';
       moveContainer.appendChild(viewportRoot);
-      
+
       new CustomOverlay(moveContainer).addTo(map);
     }
     let map = leafletModel.__map;

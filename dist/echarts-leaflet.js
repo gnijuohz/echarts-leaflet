@@ -195,10 +195,13 @@
         }
 
         /*
-         Encapsulate viewportRoot element into the parent element responsible for moving, avoiding direct manipulation of viewportRoot elements affecting related attributes such as offset.
+         Encapsulate viewportRoot element into
+         the parent element responsible for moving,
+         avoiding direct manipulation of viewportRoot elements
+         affecting related attributes such as offset.
         */
-        var moveContainer = document.createElement("div");
-        moveContainer.style = "position: relative;";
+        var moveContainer = document.createElement('div');
+        moveContainer.style = 'position: relative;';
         moveContainer.appendChild(viewportRoot);
 
         new CustomOverlay(moveContainer).addTo(_map);
@@ -284,7 +287,7 @@
       var moveContainer = api.getZr().painter.getViewportRoot().parentNode;
       var coordSys = leafletModel.coordinateSystem;
 
-      function moveHandler(type, target) {
+      var moveHandler = function moveHandler(type, target) {
         if (rendering) {
           return;
         }
@@ -313,7 +316,8 @@
         api.dispatchAction({
           type: 'leafletRoam'
         });
-      }
+      };
+
       /**
        * handler for map zoomEnd event
        */
