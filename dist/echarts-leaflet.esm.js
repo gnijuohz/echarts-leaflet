@@ -187,7 +187,15 @@ LeafletCoordSys.create = function (ecModel, api) {
         var layerControlOpts = leafletModel.get('layerControl');
         L.control.layers(baseLayers, {}, layerControlOpts).addTo(_map);
       }
-      new CustomOverlay(viewportRoot).addTo(_map);
+
+      /*
+       Encapsulate viewportRoot element into the parent element responsible for moving, avoiding direct manipulation of viewportRoot elements affecting related attributes such as offset.
+      */
+      var moveContainer = document.createElement("div");
+      moveContainer.style = "position: relative;";
+      moveContainer.appendChild(viewportRoot);
+
+      new CustomOverlay(moveContainer).addTo(_map);
     }
     var map = leafletModel.__map;
 
@@ -267,13 +275,14 @@ echarts.extendComponentView({
     var rendering = true;
 
     var leaflet = leafletModel.getLeaflet();
-    var viewportRoot = api.getZr().painter.getViewportRoot();
+    var moveContainer = api.getZr().painter.getViewportRoot().parentNode;
     var coordSys = leafletModel.coordinateSystem;
-    var moveHandler = function moveHandler(type, target) {
+
+    function moveHandler(type, target) {
       if (rendering) {
         return;
       }
-      var offsetEl = viewportRoot.parentNode.parentNode;
+      var offsetEl = leaflet._mapPane;
       // calculate new mapOffset
       var transformStyle = offsetEl.style.transform;
       var dx = 0;
@@ -289,8 +298,8 @@ echarts.extendComponentView({
         dy = -parseInt(offsetEl.style.top, 10);
       }
       var mapOffset = [dx, dy];
-      viewportRoot.style.left = mapOffset[0] + 'px';
-      viewportRoot.style.top = mapOffset[1] + 'px';
+      moveContainer.style.left = mapOffset[0] + 'px';
+      moveContainer.style.top = mapOffset[1] + 'px';
 
       coordSys.setMapOffset(mapOffset);
       leafletModel.__mapOffset = mapOffset;
@@ -298,8 +307,7 @@ echarts.extendComponentView({
       api.dispatchAction({
         type: 'leafletRoam'
       });
-    };
-
+    }
     /**
      * handler for map zoomEnd event
      */
@@ -317,16 +325,22 @@ echarts.extendComponentView({
       moveHandler();
     }
 
-    leaflet.off('move', this._oldMoveHandler);
-    leaflet.off('zoom', this._oldZoomHandler);
-    leaflet.off('zoomend', this._oldZoomEndHandler);
+    if (this._oldMoveHandler) {
+      leaflet.off('move', this._oldMoveHandler);
+    }
+    if (this._oldZoomHandler) {
+      leaflet.off('zoom', this._oldZoomHandler);
+    }
+    if (this._oldZoomEndHandler) {
+      leaflet.off('zoomend', this._oldZoomEndHandler);
+    }
 
     leaflet.on('move', moveHandler);
     leaflet.on('zoom', zoomHandler);
     leaflet.on('zoomend', zoomEndHandler);
 
     this._oldMoveHandler = moveHandler;
-    this._oldZoomEndHandler = zoomHandler;
+    this._oldZoomHandler = zoomHandler;
     this._oldZoomEndHandler = zoomEndHandler;
 
     var roam = leafletModel.get('roam');
