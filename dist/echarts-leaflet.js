@@ -1,8 +1,8 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('echarts/lib/echarts'), require('leaflet/src/Leaflet')) :
   typeof define === 'function' && define.amd ? define(['exports', 'echarts/lib/echarts', 'leaflet/src/Leaflet'], factory) :
-  (factory((global.leaflet = {}),global.echarts,global.L));
-}(this, (function (exports,echarts,L) { 'use strict';
+  (global = global || self, factory(global.leaflet = {}, global.echarts, global.L));
+}(this, function (exports, echarts, L) { 'use strict';
 
   var echarts__default = 'default' in echarts ? echarts['default'] : echarts;
   L = L && L.hasOwnProperty('default') ? L['default'] : L;
@@ -193,7 +193,18 @@
           var layerControlOpts = leafletModel.get('layerControl');
           L.control.layers(baseLayers, {}, layerControlOpts).addTo(_map);
         }
-        new CustomOverlay(viewportRoot).addTo(_map);
+
+        /*
+         Encapsulate viewportRoot element into
+         the parent element responsible for moving,
+         avoiding direct manipulation of viewportRoot elements
+         affecting related attributes such as offset.
+        */
+        var moveContainer = document.createElement('div');
+        moveContainer.style = 'position: relative;';
+        moveContainer.appendChild(viewportRoot);
+
+        new CustomOverlay(moveContainer).addTo(_map);
       }
       var map = leafletModel.__map;
 
@@ -273,13 +284,14 @@
       var rendering = true;
 
       var leaflet = leafletModel.getLeaflet();
-      var viewportRoot = api.getZr().painter.getViewportRoot();
+      var moveContainer = api.getZr().painter.getViewportRoot().parentNode;
       var coordSys = leafletModel.coordinateSystem;
+
       var moveHandler = function moveHandler(type, target) {
         if (rendering) {
           return;
         }
-        var offsetEl = viewportRoot.parentNode.parentNode;
+        var offsetEl = leaflet._mapPane;
         // calculate new mapOffset
         var transformStyle = offsetEl.style.transform;
         var dx = 0;
@@ -295,8 +307,8 @@
           dy = -parseInt(offsetEl.style.top, 10);
         }
         var mapOffset = [dx, dy];
-        viewportRoot.style.left = mapOffset[0] + 'px';
-        viewportRoot.style.top = mapOffset[1] + 'px';
+        moveContainer.style.left = mapOffset[0] + 'px';
+        moveContainer.style.top = mapOffset[1] + 'px';
 
         coordSys.setMapOffset(mapOffset);
         leafletModel.__mapOffset = mapOffset;
@@ -323,16 +335,22 @@
         moveHandler();
       }
 
-      leaflet.off('move', this._oldMoveHandler);
-      leaflet.off('zoom', this._oldZoomHandler);
-      leaflet.off('zoomend', this._oldZoomEndHandler);
+      if (this._oldMoveHandler) {
+        leaflet.off('move', this._oldMoveHandler);
+      }
+      if (this._oldZoomHandler) {
+        leaflet.off('zoom', this._oldZoomHandler);
+      }
+      if (this._oldZoomEndHandler) {
+        leaflet.off('zoomend', this._oldZoomEndHandler);
+      }
 
       leaflet.on('move', moveHandler);
       leaflet.on('zoom', zoomHandler);
       leaflet.on('zoomend', zoomEndHandler);
 
       this._oldMoveHandler = moveHandler;
-      this._oldZoomEndHandler = zoomHandler;
+      this._oldZoomHandler = zoomHandler;
       this._oldZoomEndHandler = zoomEndHandler;
 
       var roam = leafletModel.get('roam');
@@ -381,4 +399,4 @@
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
-})));
+}));

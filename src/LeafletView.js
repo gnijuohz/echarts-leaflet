@@ -7,13 +7,14 @@ export default echarts.extendComponentView({
     let rendering = true;
 
     const leaflet = leafletModel.getLeaflet();
-    const viewportRoot = api.getZr().painter.getViewportRoot();
+    const moveContainer = api.getZr().painter.getViewportRoot().parentNode;
     const coordSys = leafletModel.coordinateSystem;
+
     const moveHandler = function(type, target) {
       if (rendering) {
         return;
       }
-      const offsetEl = viewportRoot.parentNode.parentNode;
+      const offsetEl = leaflet._mapPane;
       // calculate new mapOffset
       let transformStyle = offsetEl.style.transform;
       let dx = 0;
@@ -29,8 +30,8 @@ export default echarts.extendComponentView({
         dy = -parseInt(offsetEl.style.top, 10);
       }
       let mapOffset = [dx, dy];
-      viewportRoot.style.left = `${mapOffset[0]}px`;
-      viewportRoot.style.top = `${mapOffset[1]}px`;
+      moveContainer.style.left = `${mapOffset[0]}px`;
+      moveContainer.style.top = `${mapOffset[1]}px`;
 
       coordSys.setMapOffset(mapOffset);
       leafletModel.__mapOffset = mapOffset;
@@ -57,16 +58,22 @@ export default echarts.extendComponentView({
       moveHandler();
     }
 
-    leaflet.off('move', this._oldMoveHandler);
-    leaflet.off('zoom', this._oldZoomHandler);
-    leaflet.off('zoomend', this._oldZoomEndHandler);
+    if (this._oldMoveHandler) {
+      leaflet.off('move', this._oldMoveHandler);
+    }
+    if (this._oldZoomHandler) {
+      leaflet.off('zoom', this._oldZoomHandler);
+    }
+    if (this._oldZoomEndHandler) {
+      leaflet.off('zoomend', this._oldZoomEndHandler);
+    }
 
     leaflet.on('move', moveHandler);
     leaflet.on('zoom', zoomHandler);
     leaflet.on('zoomend', zoomEndHandler);
 
     this._oldMoveHandler = moveHandler;
-    this._oldZoomEndHandler = zoomHandler;
+    this._oldZoomHandler = zoomHandler;
     this._oldZoomEndHandler = zoomEndHandler;
 
     const roam = leafletModel.get('roam');

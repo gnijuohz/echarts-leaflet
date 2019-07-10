@@ -175,7 +175,18 @@ LeafletCoordSys.create = function(ecModel, api) {
         const layerControlOpts = leafletModel.get('layerControl');
         L.control.layers(baseLayers, {}, layerControlOpts).addTo(map);
       }
-      new CustomOverlay(viewportRoot).addTo(map);
+
+      /*
+       Encapsulate viewportRoot element into
+       the parent element responsible for moving,
+       avoiding direct manipulation of viewportRoot elements
+       affecting related attributes such as offset.
+      */
+      let moveContainer = document.createElement('div');
+      moveContainer.style = 'position: relative;';
+      moveContainer.appendChild(viewportRoot);
+
+      new CustomOverlay(moveContainer).addTo(map);
     }
     let map = leafletModel.__map;
 
