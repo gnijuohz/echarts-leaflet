@@ -183,7 +183,7 @@ LeafletCoordSys.create = function(ecModel, api) {
        affecting related attributes such as offset.
       */
       let moveContainer = document.createElement('div');
-      moveContainer.style = 'position: relative;';
+      moveContainer.style = 'position: absolute;left: 0;top: 0;';
       moveContainer.appendChild(viewportRoot);
 
       new CustomOverlay(moveContainer).addTo(map);
