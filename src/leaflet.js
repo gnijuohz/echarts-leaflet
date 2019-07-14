@@ -1,31 +1,40 @@
+import createLeafletCoordSystem from './LeafletCoordSys';
+import extendLeafletModel from './LeafletModel';
+import extendLeafletView from './LeafletView';
+
 /**
- * Leftlet component extension
+ * echarts register leaflet coord system
+ * @param {object} echarts
+ * @param {object} L
  */
+function registerLeafletSystem(echarts, L) {
+  extendLeafletModel(echarts);
+  extendLeafletView(echarts);
 
-import echarts from 'echarts/lib/echarts';
-import LeafletCoordSys from './LeafletCoordSys';
+  echarts.registerCoordinateSystem(
+    'leaflet',
+    createLeafletCoordSystem(echarts, L)
+  );
 
-import './LeafletModel';
-import './LeafletView';
+  echarts.registerAction(
+    {
+      type: 'leafletRoam',
+      event: 'leafletRoam',
+      update: 'updateLayout',
+    },
+    function(payload, ecModel) {
+      ecModel.eachComponent('leaflet', function(leafletModel) {
+        const leaflet = leafletModel.getLeaflet();
+        const center = leaflet.getCenter();
+        leafletModel.setCenterAndZoom(
+          [center.lng, center.lat],
+          leaflet.getZoom()
+        );
+      });
+    }
+  );
+}
 
-echarts.registerCoordinateSystem('leaflet', LeafletCoordSys);
+registerLeafletSystem.version = '1.0.0';
 
-echarts.registerAction(
-  {
-    type: 'leafletRoam',
-    event: 'leafletRoam',
-    update: 'updateLayout',
-  },
-  function(payload, ecModel) {
-    ecModel.eachComponent('leaflet', function(leafletModel) {
-      const leaflet = leafletModel.getLeaflet();
-      const center = leaflet.getCenter();
-      leafletModel.setCenterAndZoom(
-        [center.lng, center.lat],
-        leaflet.getZoom()
-      );
-    });
-  }
-);
-
-export const version = '1.0.0';
+export default registerLeafletSystem;
