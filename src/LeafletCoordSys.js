@@ -135,7 +135,10 @@ function createLeafletCoordSystem(echarts, L) {
         // Not support IE8
         mapRoot.classList.add('ec-extension-leaflet');
         root.appendChild(mapRoot);
-        let map = (leafletModel.__map = L.map(mapRoot));
+        let map = (leafletModel.__map = L.map(
+          mapRoot,
+          leafletModel.get('mapOptions'))
+        );
         const tiles = leafletModel.get('tiles');
         let baseLayers = {};
         let baseLayerAdded = false;
@@ -171,21 +174,16 @@ function createLeafletCoordSystem(echarts, L) {
 
         new CustomOverlay(moveContainer).addTo(map);
       }
+
       let map = leafletModel.__map;
-
-      // Set leaflet options
-      // centerAndZoom before layout and render
-      const center = leafletModel.get('center');
-      const zoom = leafletModel.get('zoom');
-      if (center && zoom) {
-        map.setView([center[1], center[0]], zoom);
-      }
-
       leafletCoordSys = new LeafletCoordSys(map, api);
       leafletList.push(leafletCoordSys);
       leafletCoordSys.setMapOffset(leafletModel.__mapOffset || [0, 0]);
-      leafletCoordSys.setZoom(zoom);
-      leafletCoordSys.setCenter(center);
+      const { center, zoom } = leafletModel.get('mapOptions');
+      if (center && zoom) {
+        leafletCoordSys.setZoom(zoom);
+        leafletCoordSys.setCenter(center);
+      }
 
       leafletModel.coordinateSystem = leafletCoordSys;
     });

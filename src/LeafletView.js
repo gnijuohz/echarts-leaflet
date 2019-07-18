@@ -79,7 +79,7 @@ export default function extendLeafletView(echarts) {
       this._oldZoomHandler = zoomHandler;
       this._oldZoomEndHandler = zoomEndHandler;
 
-      const roam = leafletModel.get('roam');
+      const { roam } = leafletModel.get('mapOptions');
       // can move
       if (roam && roam !== 'scale') {
         leaflet.dragging.enable();

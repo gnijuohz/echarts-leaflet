@@ -8,6 +8,8 @@
    * generate leaflet coord system
    * @param {object}   echarts api object
    * @param {object}   L       leaflet
+   *
+   * @return {function} LeafletCoordSys
    */
   function createLeafletCoordSystem(echarts, L) {
     var util = echarts.util,
@@ -135,7 +137,7 @@
           // Not support IE8
           mapRoot.classList.add('ec-extension-leaflet');
           root.appendChild(mapRoot);
-          var _map = leafletModel.__map = L.map(mapRoot);
+          var _map = leafletModel.__map = L.map(mapRoot, leafletModel.get('mapOptions'));
           var tiles = leafletModel.get('tiles');
           var baseLayers = {};
           var baseLayerAdded = false;
@@ -193,21 +195,20 @@
 
           new CustomOverlay(moveContainer).addTo(_map);
         }
+
         var map = leafletModel.__map;
-
-        // Set leaflet options
-        // centerAndZoom before layout and render
-        var center = leafletModel.get('center');
-        var zoom = leafletModel.get('zoom');
-        if (center && zoom) {
-          map.setView([center[1], center[0]], zoom);
-        }
-
         leafletCoordSys = new LeafletCoordSys(map, api);
         leafletList.push(leafletCoordSys);
         leafletCoordSys.setMapOffset(leafletModel.__mapOffset || [0, 0]);
-        leafletCoordSys.setZoom(zoom);
-        leafletCoordSys.setCenter(center);
+
+        var _leafletModel$get = leafletModel.get('mapOptions'),
+            center = _leafletModel$get.center,
+            zoom = _leafletModel$get.zoom;
+
+        if (center && zoom) {
+          leafletCoordSys.setZoom(zoom);
+          leafletCoordSys.setCenter(center);
+        }
 
         leafletModel.coordinateSystem = leafletCoordSys;
       });
@@ -242,6 +243,10 @@
     return LeafletCoordSys;
   }
 
+  /**
+   * extend echarts model
+   * @param {object} echarts
+   */
   function extendLeafletModel(echarts) {
     /**
      * compare if two arrays of length 2 are equal
@@ -272,21 +277,22 @@
       },
 
       defaultOption: {
-        center: [104.114129, 37.550339],
-        zoom: 2,
-        mapStyle: {},
-        roam: false,
-        layerControl: {},
+        mapOptions: {},
         tiles: [{
           urlTemplate: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
           options: {
             attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           }
-        }]
+        }],
+        layerControl: {}
       }
     });
   }
 
+  /**
+   * extend echarts view
+   * @param {object} echarts
+   */
   function extendLeafletView(echarts) {
     echarts.extendComponentView({
       type: 'leaflet',
@@ -364,8 +370,11 @@
         this._oldZoomHandler = zoomHandler;
         this._oldZoomEndHandler = zoomEndHandler;
 
-        var roam = leafletModel.get('roam');
+        var _leafletModel$get = leafletModel.get('mapOptions'),
+            roam = _leafletModel$get.roam;
         // can move
+
+
         if (roam && roam !== 'scale') {
           leaflet.dragging.enable();
         } else {
@@ -390,6 +399,7 @@
   /**
    * echarts register leaflet coord system
    * @param {object} echarts
+   * @param {object} L
    */
   function registerLeafletSystem(echarts, L) {
     extendLeafletModel(echarts);

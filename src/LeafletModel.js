@@ -32,11 +32,7 @@ export default function extendLeafletModel(echarts) {
     },
 
     defaultOption: {
-      center: [104.114129, 37.550339],
-      zoom: 2,
-      mapStyle: {},
-      roam: false,
-      layerControl: {},
+      mapOptions: {},
       tiles: [
         {
           urlTemplate: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
@@ -46,6 +42,7 @@ export default function extendLeafletModel(echarts) {
           },
         },
       ],
+      layerControl: {},
     },
   });
 }
