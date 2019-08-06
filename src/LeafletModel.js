@@ -16,18 +16,18 @@ export default function extendLeafletModel(echarts) {
   echarts.extendComponentModel({
     type: 'leaflet',
 
-    getLeaflet: function() {
+    getLeaflet() {
       // __map is injected when creating LeafletCoordSys
       return this.__map;
     },
 
-    setCenterAndZoom: function(center, zoom) {
+    setCenterAndZoom(center, zoom) {
       this.option.center = center;
       this.option.zoom = zoom;
     },
 
-    centerOrZoomChanged: function(center, zoom) {
-      const option = this.option;
+    centerOrZoomChanged(center, zoom) {
+      const { option } = this;
       return !(v2Equal(center, option.center) && zoom === option.zoom);
     },
 
@@ -38,11 +38,11 @@ export default function extendLeafletModel(echarts) {
           urlTemplate: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
           options: {
             attribution:
-              '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-          },
-        },
+              '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+          }
+        }
       ],
-      layerControl: {},
-    },
+      layerControl: {}
+    }
   });
 }

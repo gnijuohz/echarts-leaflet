@@ -8,7 +8,15 @@
     },
     "rules": {
         "indent": ["error", 2],
-        "object-curly-spacing": ["error", "always"]
+        "object-curly-spacing": ["error", "always"],
+        "no-underscore-dangle": "off",
+        "no-use-before-define": "off",
+        "array-callback-return": "off",
+        "func-names": "off",
+        "no-param-reassign": "off",
+        "no-multi-assign": "off",
+        "consistent-return": "off",
+        "one-var": "off"
     },
-    "extends": "google"
+    "extends": ["airbnb", "prettier"]
 }

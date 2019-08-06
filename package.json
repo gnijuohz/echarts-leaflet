@@ -4,23 +4,36 @@
   "description": "leaflet extension for echarts",
   "main": "dist/echarts-leaflet.js",
   "scripts": {
-    "lint": "./node_modules/.bin/eslint src/*.js"
+    "lint": "eslint --fix --ext .js src",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "src/**/*.js": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "repository": "git@github.com:gnijuohz/echarts-leaflet.git",
   "author": "Jing Zhou <gnijuohz@gmail.com>",
   "license": "MIT",
-  "peerDependencies": {
-    "echarts": "^3.6.2",
-    "leaflet": "^1.1.0"
-  },
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-preset-env": "^1.6.1",
+    "husky": "^0.14.3",
+    "lint-staged": "^7.2.2",
+    "prettier": "1.14.2",
     "eslint": "^4.12.1",
-    "eslint-config-google": "^0.9.1",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-react": "^7.11.0",
     "rollup-plugin-babel": "^3.0.2",
     "rollup-plugin-commonjs": "^9.1.0",
     "rollup-plugin-node-resolve": "^3.0.0"
+  },
+  "dependencies": {
+    "rollup": "^1.19.3"
   }
 }
