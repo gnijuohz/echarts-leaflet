@@ -2,10 +2,10 @@
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('echarts/lib/echarts'), require('leaflet/src/Leaflet')) :
   typeof define === 'function' && define.amd ? define(['exports', 'echarts/lib/echarts', 'leaflet/src/Leaflet'], factory) :
   (global = global || self, factory(global.leaflet = {}, global.echarts, global.L));
-}(this, function (exports, echarts, L) { 'use strict';
+}(this, (function (exports, echarts, L) { 'use strict';
 
   var echarts__default = 'default' in echarts ? echarts['default'] : echarts;
-  L = L && L.hasOwnProperty('default') ? L['default'] : L;
+  L = L && Object.prototype.hasOwnProperty.call(L, 'default') ? L['default'] : L;
 
   /**
    * constructor for Leaflet CoordSys
@@ -399,4 +399,4 @@
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
-}));
+})));

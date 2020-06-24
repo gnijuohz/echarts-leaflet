@@ -4,7 +4,8 @@
   "description": "leaflet extension for echarts",
   "main": "dist/echarts-leaflet.js",
   "scripts": {
-    "lint": "./node_modules/.bin/eslint src/*.js"
+    "lint": "eslint src/*.js example/*.js",
+    "build": "rollup -c"
   },
   "repository": "git@github.com:gnijuohz/echarts-leaflet.git",
   "author": "Jing Zhou <gnijuohz@gmail.com>",
@@ -19,8 +20,13 @@
     "babel-preset-env": "^1.6.1",
     "eslint": "^4.12.1",
     "eslint-config-google": "^0.9.1",
+    "rollup": "^2.18.0",
     "rollup-plugin-babel": "^3.0.2",
     "rollup-plugin-commonjs": "^9.1.0",
     "rollup-plugin-node-resolve": "^3.0.0"
+  },
+  "dependencies": {
+    "echarts": "^4.8.0",
+    "leaflet": "^1.6.0"
   }
 }
