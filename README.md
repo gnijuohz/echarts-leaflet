@@ -4,7 +4,7 @@
 
 ## Install
 
-`npm i echarts-leaflet`
+`npm i echarts-leaflet` or `yarn add echarts-leaflet`
 
 ## Usage
 
@@ -31,7 +31,7 @@ import 'echarts/lib/chart/effectScatter';
 import 'echarts-leaflet';
 ```
 
-See [this example](./example/leaflet-single-layer.html). To run it, use `parcel leaflet-single-layer.html`. The usage of parcel can be found [here](https://parceljs.org/).
+See [this example](./example/leaflet-single-layer.html). To run it, use `yarn start:single` inside `example/`. The usage of parcel can be found [here](https://parceljs.org/).
 
 ## ECharts Option
 
@@ -112,7 +112,7 @@ If you don't specify a label for a tile, it won't show up in the layer control. 
 ## Build
 
 - `yarn install`
-- `rollup --config`
+- `yarn build`
 
 ## Contributors
 

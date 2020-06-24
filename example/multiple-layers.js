@@ -1,9 +1,3 @@
-import echarts from 'echarts/lib/echarts';
-import 'echarts/lib/chart/scatter';
-import 'echarts/lib/chart/effectScatter';
-
-import 'echarts-leaflet/dist/echarts-leaflet';
-
 let data = [{
   name: '海门',
   value: 9,
@@ -992,6 +986,22 @@ myChart.setOption({
     center: [104.114129, 37.550339],
     zoom: 4,
     roam: true,
+    layerControl: {
+      position: 'topright',
+    },
+    tiles: [{
+      label: '天地图',
+      urlTemplate: 'http://t2.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}',
+      options: {
+        attribution: 'tianditu.com',
+      },
+    }, {
+      label: 'Open Street Map',
+      urlTemplate: 'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
+      options: {
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, Tiles courtesy of <a href="http://hot.openstreetmap.org/" target="_blank">Humanitarian OpenStreetMap Team</a>',
+      },
+    }],
   },
   series: [{
     name: 'pm2.5',
@@ -1050,10 +1060,6 @@ myChart.setOption({
   },
   ],
 });
-
-setTimeout(()=> {
-  myChart.convertToPixel('leaflet', [0, 0]);
-}, 2000);
 
 // https://developer.mozilla.org/en-US/docs/Web/Events/resize
 (function() {
