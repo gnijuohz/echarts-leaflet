@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start:signle": "parcel leaflet-single-layer.html",
+    "start:single": "parcel leaflet-single-layer.html",
     "start:multiple": "parcel leaflet-multiple-layers.html"
   },
   "dependencies": {
