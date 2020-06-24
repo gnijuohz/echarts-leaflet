@@ -24,9 +24,5 @@
     "rollup-plugin-babel": "^3.0.2",
     "rollup-plugin-commonjs": "^9.1.0",
     "rollup-plugin-node-resolve": "^3.0.0"
-  },
-  "dependencies": {
-    "echarts": "^4.8.0",
-    "leaflet": "^1.6.0"
   }
 }
