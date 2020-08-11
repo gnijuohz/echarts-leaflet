@@ -78,7 +78,36 @@ LeafletCoordSys.prototype.getViewRect = function () {
 LeafletCoordSys.prototype.getRoamTransform = function () {
   return matrix.create();
 };
+LeafletCoordSys.prototype.prepareCustoms = function (data) {
+  var rect = this.getViewRect();
+  return {
+    coordSys: {
+      type: 'leaflet',
+      x: rect.x,
+      y: rect.y,
+      width: rect.width,
+      height: rect.height
+    },
+    api: {
+      coord: echarts.util.bind(this.dataToPoint, this),
+      size: echarts.util.bind(dataToCoordSize, this)
+    }
+  };
+};
 
+function dataToCoordSize(dataSize, dataItem) {
+  dataItem = dataItem || [0, 0];
+  return echarts.util.map([0, 1], function (dimIdx) {
+    var val = dataItem[dimIdx];
+    var halfSize = dataSize[dimIdx] / 2;
+    var p1 = [];
+    var p2 = [];
+    p1[dimIdx] = val - halfSize;
+    p2[dimIdx] = val + halfSize;
+    p1[1 - dimIdx] = p2[1 - dimIdx] = dataItem[1 - dimIdx];
+    return Math.abs(this.dataToPoint(p1)[dimIdx] - this.dataToPoint(p2)[dimIdx]);
+  }, this);
+}
 LeafletCoordSys.dimensions = LeafletCoordSys.prototype.dimensions;
 
 var CustomOverlay = L.Layer.extend({

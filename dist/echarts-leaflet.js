@@ -1,11 +1,11 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('echarts/lib/echarts'), require('leaflet/src/Leaflet')) :
   typeof define === 'function' && define.amd ? define(['exports', 'echarts/lib/echarts', 'leaflet/src/Leaflet'], factory) :
-  (global = global || self, factory(global.leaflet = {}, global.echarts, global.L));
-}(this, function (exports, echarts, L) { 'use strict';
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.leaflet = {}, global.echarts, global.L));
+}(this, (function (exports, echarts, L) { 'use strict';
 
   var echarts__default = 'default' in echarts ? echarts['default'] : echarts;
-  L = L && L.hasOwnProperty('default') ? L['default'] : L;
+  L = L && Object.prototype.hasOwnProperty.call(L, 'default') ? L['default'] : L;
 
   /**
    * constructor for Leaflet CoordSys
@@ -84,7 +84,36 @@
   LeafletCoordSys.prototype.getRoamTransform = function () {
     return echarts.matrix.create();
   };
+  LeafletCoordSys.prototype.prepareCustoms = function (data) {
+    var rect = this.getViewRect();
+    return {
+      coordSys: {
+        type: 'leaflet',
+        x: rect.x,
+        y: rect.y,
+        width: rect.width,
+        height: rect.height
+      },
+      api: {
+        coord: echarts__default.util.bind(this.dataToPoint, this),
+        size: echarts__default.util.bind(dataToCoordSize, this)
+      }
+    };
+  };
 
+  function dataToCoordSize(dataSize, dataItem) {
+    dataItem = dataItem || [0, 0];
+    return echarts__default.util.map([0, 1], function (dimIdx) {
+      var val = dataItem[dimIdx];
+      var halfSize = dataSize[dimIdx] / 2;
+      var p1 = [];
+      var p2 = [];
+      p1[dimIdx] = val - halfSize;
+      p2[dimIdx] = val + halfSize;
+      p1[1 - dimIdx] = p2[1 - dimIdx] = dataItem[1 - dimIdx];
+      return Math.abs(this.dataToPoint(p1)[dimIdx] - this.dataToPoint(p2)[dimIdx]);
+    }, this);
+  }
   LeafletCoordSys.dimensions = LeafletCoordSys.prototype.dimensions;
 
   var CustomOverlay = L.Layer.extend({
@@ -399,4 +428,4 @@
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
-}));
+})));
