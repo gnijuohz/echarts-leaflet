@@ -1,4 +1,4 @@
-import { util, graphic, matrix } from 'echarts/lib/echarts';
+import echarts,{ util, graphic, matrix } from 'echarts/lib/echarts';
 import L from 'leaflet/src/Leaflet';
 /**
  * constructor for Leaflet CoordSys
