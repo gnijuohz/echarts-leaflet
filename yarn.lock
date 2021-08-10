@@ -715,12 +715,6 @@ doctrine@^2.0.2:
   dependencies:
     esutils "^2.0.2"
 
-echarts@^3.6.2:
-  version "3.6.2"
-  resolved "https://registry.yarnpkg.com/echarts/-/echarts-3.6.2.tgz#862954c8b5810bff87a48b0de0416ed8c4bb1c36"
-  dependencies:
-    zrender "^3.5.2"
-
 electron-releases@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/electron-releases/-/electron-releases-2.1.0.tgz#c5614bf811f176ce3c836e368a0625782341fd4e"
@@ -1183,10 +1177,6 @@ kind-of@^4.0.0:
   dependencies:
     is-buffer "^1.1.5"
 
-leaflet@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/leaflet/-/leaflet-1.1.0.tgz#63246715cfc783dca6798b843a250e8e6fd84918"
-
 levn@^0.3.0, levn@~0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/levn/-/levn-0.3.0.tgz#3b09924edf9f083c0490fdd4c0bc4421e04764ee"
@@ -1337,8 +1327,8 @@ path-is-inside@^1.0.1, path-is-inside@^1.0.2:
   resolved "https://registry.yarnpkg.com/path-is-inside/-/path-is-inside-1.0.2.tgz#365417dede44430d1c11af61027facf074bdfc53"
 
 path-parse@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/path-parse/-/path-parse-1.0.5.tgz#3c1adf871ea9cd6c9431b6ea2bd74a0ff055c4c1"
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/path-parse/-/path-parse-1.0.7.tgz#fbc114b60ca42b30d9daf5858e4bd68bbedb6735"
 
 pify@^2.0.0:
   version "2.3.0"
@@ -1707,7 +1697,3 @@ write@^0.2.1:
 yallist@^2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/yallist/-/yallist-2.1.2.tgz#1c11f9218f076089a47dd512f93c6699a6a81d52"
-
-zrender@^3.5.2:
-  version "3.5.2"
-  resolved "https://registry.yarnpkg.com/zrender/-/zrender-3.5.2.tgz#e770cbe978b5f4981c1b93d9b84147a3474f21d2"
